@@ -74,37 +74,37 @@ public class GUI extends JFrame
 		  
 		  content.setLayout( new GridLayout( 0, 2 ) );
 		  content.add( createTrack( "curve", new ImageIcon( "docs/curve45.png" ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 0, Connector.NW, 46, 8, Connector.N ) ) );
 		  content.add( createTrack( "curve", new ImageIcon( "docs/curve45-2.png" ), 
-		                            connectors( 8, 46, Connector.W, 1, 1, Connector.S ) ) );
+		                            connectors( 8, 46, Connector.W, 1, 1, Connector.SE ) ) );
 		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45.png" ), true, false ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 0, Connector.S, 1, 1, Connector.SW ) ) );
 		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45-2.png" ), true, false ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 25, 46, Connector.W, 1, 1, Connector.NE ) ) );
 		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45.png" ), false, true ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 0, Connector.NE, 46, 25, Connector.N ) ) );
 		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45-2.png" ), false, true ), 
-		                            connectors( 0, 0, Connector.E, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 0, Connector.E, 1, 1, Connector.SW ) ) );
 		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45.png" ), true, true ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 17, Connector.S, 1, 1, Connector.SE ) ) );
 		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45-2.png" ), true, true ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 17, 0, Connector.E, 1, 1, Connector.NW ) ) );
 		  content.add( createTrack( "straight", new ImageIcon( "docs/shorthorizstraight.png" ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 0, Connector.S, 32, 8, Connector.N ) ) );
 		  content.add( createTrack( "straight", new ImageIcon( "docs/straighthorizlong.png" ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 0, Connector.S, 48, 8, Connector.N ) ) );
 		  content.add( createTrack( "straight", new ImageIcon( "docs/shortvertstraight.png" ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 0, Connector.E, 8, 32, Connector.W ) ) );
 		  content.add( createTrack( "straight", new ImageIcon( "docs/straightvertlong.png" ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 0, Connector.E, 8, 48, Connector.W ) ) );
 		  content.add( createTrack( "diagonal", new ImageIcon( "docs/diagonalshort.png" ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 0, Connector.SE, 1, 1, Connector.NW ) ) );
 		  content.add( createTrack( "diagonal", new ImageIcon( "docs/diagonallong.png" ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 0, Connector.SE, 1, 1, Connector.NW ) ) );
 		  content.add( createTrack( "diagonal", flipIcon( new ImageIcon( "docs/diagonalshort.png" ), true, false ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 0, Connector.SW, 1, 1, Connector.NE ) ) );
 		  content.add( createTrack( "diagonal", flipIcon( new ImageIcon( "docs/diagonallong.png" ), true, false ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 0, Connector.SW, 1, 1, Connector.NE ) ) );
 		  
 		  return palette;
 		}
