@@ -6,38 +6,22 @@
  */
 package uk.me.wouldbe.train;
 
-
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.Point;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.TransferHandler;
 
@@ -92,7 +76,7 @@ public class GUI extends JFrame
 		  content.add( createTrack( "curve", new ImageIcon( "docs/curve45.png" ), 
 		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
 		  content.add( createTrack( "curve", new ImageIcon( "docs/curve45-2.png" ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 8, 46, Connector.W, 1, 1, Connector.S ) ) );
 		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45.png" ), true, false ), 
 		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
 		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45-2.png" ), true, false ), 
@@ -100,7 +84,7 @@ public class GUI extends JFrame
 		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45.png" ), false, true ), 
 		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
 		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45-2.png" ), false, true ), 
-		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		                            connectors( 0, 0, Connector.E, 1, 1, Connector.S ) ) );
 		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45.png" ), true, true ), 
 		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
 		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45-2.png" ), true, true ), 
@@ -168,7 +152,7 @@ public class GUI extends JFrame
 			//UIManager.setLookAndFeel( new MetalLookAndFeel() );
 			JFrame splash = createSplashScreen();
 			splash.setVisible( true );
-			GUI frame = new GUI();
+			new GUI();
 			splash.setVisible( false );
 			splash = null;
 		}		

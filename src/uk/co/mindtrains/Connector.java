@@ -47,16 +47,20 @@ public class Connector
 
 	public boolean connected( Connector connector )
 	{
-		return compatible( connector ) && ( midpoint().distance( connector.midpoint() ) < CONNECTED );
+		return compatible( connector ) && ( midlocation().distance( connector.midlocation() ) < CONNECTED );
 	}
 	
 	public Point snap( Connector connector )
 	{
 		if ( compatible( connector ) && near( connector ) )
-			return new Point( (int)( location.getX() + offset.getX() - connector.offset.getX() ),
-			                  (int)( location.getY() + offset.getY() - connector.offset.getY() ) );
+		{
+			Point midlocation = midlocation();
+			Point midoffset = connector.midoffset();
+			return new Point( (int)( midlocation.getX() - midoffset.getX() ),
+			                  (int)( midlocation.getY() - midoffset.getY() ) );
+		}
 		else
-			return connector.getLocation();
+			return null;
 	}
 	
 	protected boolean compatible( Connector connector )
@@ -64,14 +68,21 @@ public class Connector
 		return Math.abs( connector.orientation - orientation ) == Math.PI;
 	}
 
-	protected Point midpoint()
+	protected Point midlocation()
 	{
-		return new Point( (int)( location.getX() + offset.getX() + ( Math.sin( orientation ) * WIDTH / 2 ) ),
-		                  (int)( location.getY() + offset.getY() + ( Math.cos( orientation ) * WIDTH / 2 ) ) );
+		Point midoffset = midoffset();
+		return new Point( (int)( location.getX() + midoffset.getX() ),
+		                  (int)( location.getY() + midoffset.getY() ) );
 	}
 	
+	protected Point midoffset()
+	{
+		return new Point( (int)( offset.getX() + ( Math.sin( orientation ) * WIDTH / 2 ) ),
+		                  (int)( offset.getY() + ( Math.cos( orientation ) * WIDTH / 2 ) ) );
+	}
+
 	protected boolean near( Connector connector )
 	{
-		return NEAR <= midpoint().distance( connector.midpoint() );
+		return midlocation().distance( connector.midlocation() ) <= NEAR;
 	}
 }

@@ -18,10 +18,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 
 import javax.swing.DesktopManager;
-import javax.swing.Icon;
-import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -30,8 +27,9 @@ import javax.swing.JPanel;
  */
 public class Layout extends JPanel
 {
-	private Component piece;
-	private Point offset;
+	private static final long serialVersionUID = 1L;
+	private Piece.Label dragging;
+	private Point dragOffset;
 	
 	public Layout(final DesktopManager manager)
 	{
@@ -40,14 +38,17 @@ public class Layout extends JPanel
 		{
 			public void mousePressed( MouseEvent e )
 			{
-				piece = findComponentAt( e.getPoint() );
+				Component piece = findComponentAt( e.getPoint() );
 				if ( piece != null && piece instanceof Piece.Label )
 				{
-					offset = new Point( e.getX() - piece.getX(), e.getY() - piece.getY() );
+					dragging = (Piece.Label)piece;
+					dragOffset = new Point( e.getX() - piece.getX(), e.getY() - piece.getY() );
 					remove( piece );
 					add( piece, 0 );
 					repaint();
 				}
+				else
+					piece = null;
 			}
 		} );
 
@@ -55,16 +56,26 @@ public class Layout extends JPanel
 		{
 			public void mouseDragged( MouseEvent e )
 			{
-				if ( piece != null && piece instanceof Piece.Label )
-					piece.setLocation( e.getX() - (int)offset.getX(), e.getY() - (int)offset.getY() );
+				if ( dragging != null )
+				{
+					dragging.setLocation( e.getX() - (int)dragOffset.getX(), e.getY() - (int)dragOffset.getY() );
+					Point snap = null;
+					for ( int i = 0; i < getComponentCount(); i++ )
+					{
+						Component component = getComponent( i );
+						if ( component != dragging )
+							snap = Piece.closest( ( (Piece.Label)component ).getPiece().snap( dragging.getPiece() ), snap, dragging.getLocation() );
+					}
+					if ( snap != null )
+						dragging.setLocation( snap );
+				}
 			}
 		} );
 		
-		DropTarget drop = new DropTarget(this,
-		                                 DnDConstants.ACTION_COPY,
-		                                 new DropTargetListener()
-		               {
-
+		new DropTarget( this,
+		                DnDConstants.ACTION_COPY,
+		                new DropTargetListener()
+		                {
 						public void dragEnter( DropTargetDragEvent dtde )
 						{
 							 dtde.acceptDrag(DnDConstants.ACTION_COPY);
@@ -112,7 +123,7 @@ public class Layout extends JPanel
 						}
 			
 		               },
-		               	true);
+		               true );
 	}
 	
 }

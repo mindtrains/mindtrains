@@ -6,7 +6,6 @@ package uk.me.wouldbe.train;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -26,11 +25,11 @@ import java.io.IOException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.TransferHandler;
 
 public class IconTransferHandler extends TransferHandler
 {
+	private static final long serialVersionUID = 1L;
 	public static final DataFlavor NATIVE_FLAVOR = new DataFlavor( Icon.class, DataFlavor.javaJVMLocalObjectMimeType );
 	Image image;
     private static SwingDragGestureRecognizer recognizer = null;
@@ -103,9 +102,11 @@ public class IconTransferHandler extends TransferHandler
 
 	
 
-    private static class SwingDragGestureRecognizer extends DragGestureRecognizer {
+    private static class SwingDragGestureRecognizer extends DragGestureRecognizer
+    {
+		private static final long serialVersionUID = 1L;
 
-    	SwingDragGestureRecognizer(DragGestureListener dgl) {
+		SwingDragGestureRecognizer(DragGestureListener dgl) {
     	    super(DragSource.getDefaultDragSource(), null, NONE, dgl);
     	}
 
