@@ -35,9 +35,8 @@ public class IconTransferHandler extends TransferHandler
 	Image image;
     private static SwingDragGestureRecognizer recognizer = null;
 
-	public IconTransferHandler( String property, Image image )
+	public IconTransferHandler( Image image )
 	{
-		super( property );
 		this.image = image;
 	}
 	

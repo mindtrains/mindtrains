@@ -9,6 +9,7 @@ package uk.me.wouldbe.train;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -36,27 +37,27 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.TransferHandler;
 
 public class GUI extends JFrame
 {
 	private static final long serialVersionUID = 1L;
-	private JInternalFrame layout;
-	private Component piece;
-	protected Point offset;
 		
 		public GUI()
 		{
-		  super( "ProgrammingTrain" );
-		  setDefaultCloseOperation( EXIT_ON_CLOSE );
-		  JDesktopPane desktop = new JDesktopPane();
-		  desktop.add( createTrackPalette(), JLayeredPane.PALETTE_LAYER );
-		  desktop.add( createToolBar(), BorderLayout.NORTH );
-		  layout = createLayoutFrame();
-		  desktop.add( layout );
-		  setContentPane( desktop );
-		  setSize( 876, 634 );
+			super( "ProgrammingTrain" );
+			setDefaultCloseOperation( EXIT_ON_CLOSE );
+			JDesktopPane desktop = new JDesktopPane();
+			desktop.add( createTrackPalette(), JLayeredPane.PALETTE_LAYER );
+			desktop.add( createToolBar(), BorderLayout.NORTH );
+			JInternalFrame layout = createLayoutFrame( desktop );
+			desktop.add( layout );
+			setContentPane( desktop );
+			setSize( 876, 634 );
+			setVisible( true );
+			desktop.getDesktopManager().activateFrame( layout );
 		}
 
 		private JToolBar createToolBar()
@@ -67,93 +68,13 @@ public class GUI extends JFrame
 			return toolBar;
 		}
 		
-		protected JInternalFrame createLayoutFrame()
+		protected JInternalFrame createLayoutFrame( JDesktopPane desktop )
 		{
 			final JInternalFrame frame = new JInternalFrame( "Track" );
 			frame.setSize( 720, 576 );
 			frame.setLocation( 2, 36 );
 			frame.setVisible( true );
-			//frame.getContentPane().setDropTarget()
-			frame.getContentPane().setLayout( null );
-			frame.getContentPane().addMouseListener( new MouseAdapter()
-			{
-				public void mousePressed( MouseEvent e )
-				{
-					piece = frame.getContentPane().findComponentAt( e.getPoint() );
-					if ( piece != null && piece instanceof JLabel )
-					{
-						offset = new Point( e.getX() - piece.getX(), e.getY() - piece.getY() );
-						frame.getContentPane().remove( piece );
-						frame.getContentPane().add( piece, 0 );
-						frame.getContentPane().repaint();
-					}
-				}
-			} );
-
-			frame.getContentPane().addMouseMotionListener( new MouseMotionAdapter()
-			{
-				public void mouseDragged( MouseEvent e )
-				{
-					if ( piece != null && piece instanceof JLabel )
-						piece.setLocation( e.getX() - (int)offset.getX(), e.getY() - (int)offset.getY() );
-				}
-			} );
-			
-			DropTarget drop = new DropTarget(frame.getContentPane(),
-			                                 DnDConstants.ACTION_COPY,
-			                                 new DropTargetListener()
-			               {
-
-							public void dragEnter( DropTargetDragEvent dtde )
-							{
-								 dtde.acceptDrag(DnDConstants.ACTION_COPY);
-							}
-
-							public void dragOver( DropTargetDragEvent dtde )
-							{
-								 dtde.acceptDrag(DnDConstants.ACTION_COPY);
-							}
-
-							public void dropActionChanged( DropTargetDragEvent dtde )
-							{
-								 dtde.acceptDrag(DnDConstants.ACTION_COPY);
-							}
-
-							public void dragExit( DropTargetEvent dte )
-							{
-							}
-
-							public void drop( DropTargetDropEvent dtde )
-							{
-								 dtde.acceptDrop(DnDConstants.ACTION_COPY);
-								 try
-								{
-									Icon icon = (Icon)dtde.getTransferable().getTransferData( IconTransferHandler.NATIVE_FLAVOR );
-						        	JLabel piece = new JLabel( icon );
-						        	Point location = new Point( dtde.getLocation() );
-						        	location.translate( -icon.getIconWidth(), -icon.getIconHeight() );
-						        	piece.setLocation( location );
-						        	piece.setSize( icon.getIconWidth(), icon.getIconHeight() );
-									piece.setOpaque( false );
-									layout.getContentPane().add( piece, 0 );
-									layout.getContentPane().repaint();
-									 dtde.dropComplete(true);
-										( (JDesktopPane) GUI.this.getContentPane() ).getDesktopManager().activateFrame( layout );
-
-								}
-								catch ( UnsupportedFlavorException e )
-								{
-									e.printStackTrace();
-								}
-								catch ( IOException e )
-								{
-									e.printStackTrace();
-								}
-							}
-				
-			               },
-			               	true);
-			
+			frame.setContentPane( new Layout( desktop.getDesktopManager() ) );
 			return frame;
 		}
 		
@@ -165,25 +86,49 @@ public class GUI extends JFrame
 		  palette.setLocation( 724, 36 );
 		  palette.setVisible( true );
 		  
-		  palette.getContentPane().setLayout( new GridLayout( 0, 2 ) );
-		  palette.getContentPane().add( createTrack( "curve", new ImageIcon( "docs/curve45.png" ) ) );
-		  palette.getContentPane().add( createTrack( "curve", new ImageIcon( "docs/curve45-2.png" ) ) );
-		  palette.getContentPane().add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45.png" ), true, false ) ) );
-		  palette.getContentPane().add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45-2.png" ), true, false ) ) );
-		  palette.getContentPane().add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45.png" ), false, true ) ) );
-		  palette.getContentPane().add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45-2.png" ), false, true ) ) );
-		  palette.getContentPane().add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45.png" ), true, true ) ) );
-		  palette.getContentPane().add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45-2.png" ), true, true ) ) );
-		  palette.getContentPane().add( createTrack( "straight", new ImageIcon( "docs/shorthorizstraight.png" ) ) );
-		  palette.getContentPane().add( createTrack( "straight", new ImageIcon( "docs/straighthorizlong.png" ) ) );
-		  palette.getContentPane().add( createTrack( "straight", new ImageIcon( "docs/shortvertstraight.png" ) ) );
-		  palette.getContentPane().add( createTrack( "straight", new ImageIcon( "docs/straightvertlong.png" ) ) );
-		  palette.getContentPane().add( createTrack( "diagonal", new ImageIcon( "docs/diagonalshort.png" ) ) );
-		  palette.getContentPane().add( createTrack( "diagonal", new ImageIcon( "docs/diagonallong.png" ) ) );
-		  palette.getContentPane().add( createTrack( "diagonal", flipIcon( new ImageIcon( "docs/diagonalshort.png" ), true, false ) ) );
-		  palette.getContentPane().add( createTrack( "diagonal", flipIcon( new ImageIcon( "docs/diagonallong.png" ), true, false ) ) );
+		  Container content = palette.getContentPane();
+		  
+		  content.setLayout( new GridLayout( 0, 2 ) );
+		  content.add( createTrack( "curve", new ImageIcon( "docs/curve45.png" ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "curve", new ImageIcon( "docs/curve45-2.png" ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45.png" ), true, false ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45-2.png" ), true, false ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45.png" ), false, true ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45-2.png" ), false, true ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45.png" ), true, true ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "curve", flipIcon( new ImageIcon( "docs/curve45-2.png" ), true, true ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "straight", new ImageIcon( "docs/shorthorizstraight.png" ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "straight", new ImageIcon( "docs/straighthorizlong.png" ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "straight", new ImageIcon( "docs/shortvertstraight.png" ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "straight", new ImageIcon( "docs/straightvertlong.png" ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "diagonal", new ImageIcon( "docs/diagonalshort.png" ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "diagonal", new ImageIcon( "docs/diagonallong.png" ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "diagonal", flipIcon( new ImageIcon( "docs/diagonalshort.png" ), true, false ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
+		  content.add( createTrack( "diagonal", flipIcon( new ImageIcon( "docs/diagonallong.png" ), true, false ), 
+		                            connectors( 0, 0, Connector.N, 1, 1, Connector.S ) ) );
 		  
 		  return palette;
+		}
+
+		private Connector[] connectors( int offx1, int offy1, short orie1, int offx2, int offy2, short orie2 )
+		{
+			return new Connector[] { new Connector( new Point( offx1, offy1 ), orie1 ),
+									 new Connector( new Point( offx2, offy2 ), orie2 ) };
 		}
 
 		public ImageIcon flipIcon( ImageIcon icon, boolean lr, boolean tb )
@@ -201,13 +146,11 @@ public class GUI extends JFrame
 		  splash.setSize( 300, 300 );
 		  return splash;
 		}
-		
-		
-		
-		protected JLabel createTrack( String text, final Icon icon )
+
+		protected Piece createTrack( String text, Icon icon, Connector[] connectors  )
 		{
-			JLabel componentType = new JLabel( icon );
-			componentType.setTransferHandler(new IconTransferHandler("text", ( (ImageIcon)icon ).getImage() ));
+			Piece componentType = new Piece( icon, connectors );
+			componentType.setTransferHandler( new IconTransferHandler( ( (ImageIcon)icon ).getImage() ));
 			MouseListener ml = new MouseAdapter() {
 			    public void mousePressed(MouseEvent e) {
 			        JComponent c = (JComponent)e.getSource();
@@ -219,34 +162,14 @@ public class GUI extends JFrame
 			return componentType;
 		}
 		
-		protected JButton createButton( String text, final Icon icon )
-		{
-			return new JButton( new AbstractAction( text, icon )
-			{
-		        public void actionPerformed( ActionEvent e)
-		        {
-		        	JLabel piece = new JLabel( icon );
-		        	piece.setLocation( 0, 0 );
-		        	piece.setSize( icon.getIconWidth(), icon.getIconHeight() );
-					piece.setOpaque( false );
-					layout.getContentPane().add( piece, 0 );
-					layout.getContentPane().validate();	
-					layout.getContentPane().repaint();
-		        }
-			} );
-	    }
-		
 		public static void main( String[] args ) throws Exception
 		{
 			//System.out.println( "drag: " + DragSource.isDragImageSupported() );
 			//UIManager.setLookAndFeel( new MetalLookAndFeel() );
 			JFrame splash = createSplashScreen();
 			splash.setVisible( true );
-			GUI frame = new GUI();			
+			GUI frame = new GUI();
 			splash.setVisible( false );
 			splash = null;
-			frame.setVisible( true );
-			( (JDesktopPane)frame.getContentPane() ).getDesktopManager().activateFrame( frame.layout );
-
 		}		
 }
