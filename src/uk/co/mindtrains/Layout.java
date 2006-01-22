@@ -41,7 +41,7 @@ public class Layout extends JPanel
 			public void mousePressed( MouseEvent e )
 			{
 				piece = findComponentAt( e.getPoint() );
-				if ( piece != null && piece instanceof Piece )
+				if ( piece != null && piece instanceof Piece.Label )
 				{
 					offset = new Point( e.getX() - piece.getX(), e.getY() - piece.getY() );
 					remove( piece );
@@ -55,7 +55,7 @@ public class Layout extends JPanel
 		{
 			public void mouseDragged( MouseEvent e )
 			{
-				if ( piece != null && piece instanceof Piece )
+				if ( piece != null && piece instanceof Piece.Label )
 					piece.setLocation( e.getX() - (int)offset.getX(), e.getY() - (int)offset.getY() );
 			}
 		} );
@@ -89,16 +89,16 @@ public class Layout extends JPanel
 							 dtde.acceptDrop( DnDConstants.ACTION_COPY );
 							 try
 							{
-								Icon icon = (Icon)dtde.getTransferable().getTransferData( IconTransferHandler.NATIVE_FLAVOR );
-					        	JLabel piece = new JLabel( icon );
+								Piece piece = (Piece)dtde.getTransferable().getTransferData( IconTransferHandler.NATIVE_FLAVOR );
+					        	Piece.Label label = piece.new Label();
 					        	Point location = new Point( dtde.getLocation() );
-					        	location.translate( -icon.getIconWidth(), -icon.getIconHeight() );
-					        	piece.setLocation( location );
-					        	piece.setSize( icon.getIconWidth(), icon.getIconHeight() );
-								piece.setOpaque( false );
-								add( piece, 0 );
+					        	location.translate( -piece.getIcon().getIconWidth(), -piece.getIcon().getIconHeight() );
+					        	label.setLocation( location );
+					        	label.setSize( piece.getIcon().getIconWidth(), piece.getIcon().getIconHeight() );
+								label.setOpaque( false );
+								add( label, 0 );
 								repaint();
-								dtde.dropComplete(true);
+								dtde.dropComplete( true );
 								manager.activateFrame( (JInternalFrame)getParent().getParent().getParent() );
 							}
 							catch ( UnsupportedFlavorException e )

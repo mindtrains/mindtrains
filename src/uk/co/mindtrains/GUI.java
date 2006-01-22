@@ -147,9 +147,9 @@ public class GUI extends JFrame
 		  return splash;
 		}
 
-		protected Piece createTrack( String text, Icon icon, Connector[] connectors  )
+		protected Piece.Label createTrack( String text, Icon icon, Connector[] connectors  )
 		{
-			Piece componentType = new Piece( icon, connectors );
+			Piece.Label componentType = new Piece( icon, connectors ).new Label();
 			componentType.setTransferHandler( new IconTransferHandler( ( (ImageIcon)icon ).getImage() ));
 			MouseListener ml = new MouseAdapter() {
 			    public void mousePressed(MouseEvent e) {

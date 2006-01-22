@@ -94,7 +94,7 @@ public class IconTransferHandler extends TransferHandler
 
 			public Object getTransferData( DataFlavor flavor ) throws UnsupportedFlavorException, IOException
 			{
-				return ( (JLabel)c ).getIcon();
+				return ( (Piece.Label)c ).getPiece().clone();
 			}
 			
 		};
