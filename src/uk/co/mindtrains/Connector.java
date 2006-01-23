@@ -75,10 +75,13 @@ public class Connector
 		                  (int)( location.getY() + midoffset.getY() ) );
 	}
 	
+	/**
+	 * We subtract the orientation, to make north up (as Java coords increase downwards)
+	 */
 	protected Point midoffset()
 	{
 		return new Point( (int)( offset.getX() + ( Math.sin( orientation ) * WIDTH / 2 ) ),
-		                  (int)( offset.getY() + ( Math.cos( orientation ) * WIDTH / 2 ) ) );
+		                  (int)( offset.getY() - ( Math.cos( orientation ) * WIDTH / 2 ) ) );
 	}
 
 	protected boolean near( Connector connector )
