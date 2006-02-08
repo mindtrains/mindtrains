@@ -61,6 +61,20 @@ public class Piece implements Cloneable
 			return b;
 	}
 	
+	public boolean connected( Piece piece )
+	{
+		for ( int i = 0; i < connectors.length; i++ )
+		{
+			for ( int j = 0; j < piece.connectors.length; j++ )
+			{
+				if ( connectors[ i ].connected( piece.connectors[ j ] ) )
+					return true;
+			}
+		}
+
+		return false;
+	}
+
 	public class Label extends JLabel
 	{
 		private static final long serialVersionUID = 1L;

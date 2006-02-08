@@ -10,11 +10,13 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
+import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -22,6 +24,8 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.TransferHandler;
 
@@ -35,8 +39,15 @@ public class GUI extends JFrame
 			setDefaultCloseOperation( EXIT_ON_CLOSE );
 			JDesktopPane desktop = new JDesktopPane();
 			desktop.add( createTrackPalette(), JLayeredPane.PALETTE_LAYER );
-			desktop.add( createToolBar(), BorderLayout.NORTH );
-			JInternalFrame layout = createLayoutFrame( desktop );
+			JToolBar toolBar = createToolBar();
+			desktop.add( toolBar, BorderLayout.NORTH );
+			final JInternalFrame layout = createLayoutFrame( desktop );
+			
+			toolBar.add( new AbstractAction() {
+				public void actionPerformed(ActionEvent arg0) {
+					( (Layout)layout.getContentPane() ).printProgram();
+				}} );
+			
 			desktop.add( layout );
 			setContentPane( desktop );
 			setSize( 876, 634 );
@@ -58,7 +69,7 @@ public class GUI extends JFrame
 			frame.setSize( 720, 576 );
 			frame.setLocation( 2, 36 );
 			frame.setVisible( true );
-			frame.setContentPane( new Layout( desktop.getDesktopManager() ) );
+			frame.setContentPane( new Layout( desktop.getDesktopManager(), new Point( 50, 50 ) ) );
 			return frame;
 		}
 		
@@ -70,8 +81,7 @@ public class GUI extends JFrame
 		  palette.setLocation( 724, 36 );
 		  palette.setVisible( true );
 		  
-		  Container content = palette.getContentPane();
-		  
+		  Container content = new JPanel();
 		  content.setLayout( new GridLayout( 0, 2 ) );
 		  content.add( createTrack( "curve", new ImageIcon( "docs/curve45.png" ), 
 		                            connectors( 1, 19, Connector.SE, 46, 8, Connector.N ) ) );
@@ -105,7 +115,17 @@ public class GUI extends JFrame
 		                            connectors( 5, 0, Connector.SW, 23, 28, Connector.NE ) ) );
 		  content.add( createTrack( "diagonal", flipIcon( new ImageIcon( "docs/diagonallong.png" ), true, false ), 
 		                            connectors( 5, 0, Connector.SW, 34, 39, Connector.NE ) ) );
+
+		  Container switches = new JPanel();
+		  switches.setLayout( new GridLayout( 0, 2 ) );
+		  switches.add( createTrack( "curve", new ImageIcon( "docs/if.png" ), 
+                connectors( 0, 17, Connector.S, 45, 6, Connector.NW, 48, 25, Connector.N ) ) );
 		  
+		  JTabbedPane tabs = new JTabbedPane();
+		  tabs.addTab( "track", content );
+		  tabs.addTab( "switches", switches );
+		  palette.getContentPane().add( tabs );
+
 		  return palette;
 		}
 
@@ -113,6 +133,13 @@ public class GUI extends JFrame
 		{
 			return new Connector[] { new Connector( new Point( offx1, offy1 ), orie1 ),
 									 new Connector( new Point( offx2, offy2 ), orie2 ) };
+		}
+
+		private Connector[] connectors( int offx1, int offy1, short orie1, int offx2, int offy2, short orie2, int offx3, int offy3, short orie3 )
+		{
+			return new Connector[] { new Connector( new Point( offx1, offy1 ), orie1 ),
+									 new Connector( new Point( offx2, offy2 ), orie2 ),
+									 new Connector( new Point( offx3, offy3 ), orie3 )};
 		}
 
 		public ImageIcon flipIcon( ImageIcon icon, boolean lr, boolean tb )

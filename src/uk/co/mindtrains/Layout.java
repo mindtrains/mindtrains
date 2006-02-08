@@ -16,8 +16,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.DesktopManager;
+import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
@@ -29,11 +32,19 @@ public class Layout extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	private Piece.Label dragging;
+	private Piece.Label main;
 	private Point dragOffset;
 	
-	public Layout(final DesktopManager manager)
+	public Layout(final DesktopManager manager, Point start )
 	{
 		setLayout( null );
+		
+		main = new Piece( new ImageIcon( "docs/tunnel.png" ),
+						  new Connector[] { new Connector( new Point( 16, 14 ), Connector.N ) } ).new Label();
+		main.setSize( 16, 20 );
+		main.setLocation( start );
+		add( main, 0 );
+		
 		addMouseListener( new MouseAdapter()
 		{
 			public void mousePressed( MouseEvent e )
@@ -126,4 +137,29 @@ public class Layout extends JPanel
 		               true );
 	}
 	
+	public void printProgram()
+	{
+		System.out.println( main );
+		Set done = new HashSet();
+		Piece.Label now = main;
+		Piece.Label next;
+		do
+		{
+			next = null;
+			for ( int i = 0; i < getComponentCount(); i++ )
+			{
+				Piece.Label piece = (Piece.Label)getComponent( i );
+				if ( piece != now && !done.contains( piece ) &&
+					 piece.getPiece().connected( now.getPiece() ) )
+				{
+					next = piece;
+					System.out.println( piece );
+					continue;
+				}
+			}
+			done.add( now );
+			now = next;
+		}
+		while ( now != null );
+	}
 }
