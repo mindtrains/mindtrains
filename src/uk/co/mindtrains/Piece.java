@@ -4,6 +4,7 @@
 package uk.me.wouldbe.train;
 
 import java.awt.Point;
+import java.util.Random;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
@@ -11,6 +12,8 @@ import javax.swing.JLabel;
 public class Piece implements Cloneable
 {
 	private static final long serialVersionUID = 1L;
+	private static final Random random = new Random( System.currentTimeMillis() );
+
 	private Icon icon;
 	private Connector[] connectors;
 	private Point location;
@@ -70,18 +73,15 @@ public class Piece implements Cloneable
 			return b;
 	}
 	
-	public boolean connected( Piece piece )
+	public Connector connected( Connector connector )
 	{
 		for ( int i = 0; i < connectors.length; i++ )
 		{
-			for ( int j = 0; j < piece.connectors.length; j++ )
-			{
-				if ( connectors[ i ].connected( piece.connectors[ j ] ) )
-					return true;
-			}
+			if ( connectors[ i ].connected( connector ) )
+				return connectors[ i ];
 		}
 
-		return false;
+		return null;
 	}
 
 	public class Label extends JLabel
@@ -111,6 +111,25 @@ public class Piece implements Cloneable
 		}
 	}
 
+	public Connector travel( Train train, Connector entry )
+	{
+		System.err.println( "connectors: " + connectors.length + " " + entry );
+		if ( connectors.length == 1 )
+		{
+			train.setLocation( connectors[ 0 ].midlocation() );
+			return connectors[ 0 ];
+		}
+		else
+		{
+			train.setLocation( entry.midlocation() );
+	    	int i;
+	    	do
+	    		i = random.nextInt( connectors.length );
+	    	while ( connectors[ i ] == entry );
+	    	return connectors[ i ];
+		}
+	}
+	
 	public void setLocation( Point location )
 	{
 		this.location = location;

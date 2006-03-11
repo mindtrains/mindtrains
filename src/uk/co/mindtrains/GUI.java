@@ -118,8 +118,10 @@ public class GUI extends JFrame
 
 		  Container switches = new JPanel();
 		  switches.setLayout( new GridLayout( 0, 2 ) );
-		  switches.add( createTrack( "curve", new ImageIcon( "docs/if.png" ), 
-                connectors( 0, 17, Connector.S, 45, 6, Connector.NW, 48, 25, Connector.N ) ) );
+		  switches.add( createTrack( "if", new ImageIcon( "docs/if.png" ), 
+		                             connectors( 0, 17, Connector.S, 45, 6, Connector.NW, 48, 25, Connector.N ) ) );
+		  switches.add( createTrack( "if", flipIcon( new ImageIcon( "docs/if.png" ), true, false ), 
+		                             connectors( 8, 1, Connector.SW, 48, 25, Connector.N, 0, 17, Connector.S ) ) );
 		  
 		  JTabbedPane tabs = new JTabbedPane();
 		  tabs.addTab( "track", content );
