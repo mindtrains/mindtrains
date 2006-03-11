@@ -10,7 +10,7 @@ import java.awt.Point;
  * this piece, its location (both from top left, in the Java-stylee)
  * plus an orientation (0 degrees = up).
  */
-public class Connector
+public class Connector implements Cloneable
 {
 	public final static short N = 0;
 	public final static short NE = 45;
@@ -88,4 +88,17 @@ public class Connector
 	{
 		return midlocation().distance( connector.midlocation() ) <= NEAR;
 	}
+
+	public Object clone()
+	{
+		try
+		{	
+			return super.clone();
+		}
+		catch( CloneNotSupportedException e )
+		{
+			return null;
+		}
+	}
+
 }

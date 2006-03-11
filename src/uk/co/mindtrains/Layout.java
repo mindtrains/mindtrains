@@ -70,15 +70,7 @@ public class Layout extends JPanel
 				if ( dragging != null )
 				{
 					dragging.setLocation( e.getX() - (int)dragOffset.getX(), e.getY() - (int)dragOffset.getY() );
-					Point snap = null;
-					for ( int i = 0; i < getComponentCount(); i++ )
-					{
-						Component component = getComponent( i );
-						if ( component != dragging )
-							snap = Piece.closest( ( (Piece.Label)component ).getPiece().snap( dragging.getPiece() ), snap, dragging.getLocation() );
-					}
-					if ( snap != null )
-						dragging.setLocation( snap );
+					snap( dragging );
 				}
 			}
 		} );
@@ -112,13 +104,14 @@ public class Layout extends JPanel
 							 try
 							{
 								Piece piece = (Piece)dtde.getTransferable().getTransferData( IconTransferHandler.NATIVE_FLAVOR );
-					        	Piece.Label label = piece.new Label();
+					        	Piece.Label dropped = piece.new Label();
 					        	Point location = new Point( dtde.getLocation() );
 					        	location.translate( -piece.getIcon().getIconWidth(), -piece.getIcon().getIconHeight() );
-					        	label.setLocation( location );
-					        	label.setSize( piece.getIcon().getIconWidth(), piece.getIcon().getIconHeight() );
-								label.setOpaque( false );
-								add( label, 0 );
+					        	dropped.setLocation( location );
+								snap( dropped );
+								dropped.setSize( piece.getIcon().getIconWidth(), piece.getIcon().getIconHeight() );
+								dropped.setOpaque( false );
+								add( dropped, 0 );
 								repaint();
 								dtde.dropComplete( true );
 								manager.activateFrame( (JInternalFrame)getParent().getParent().getParent() );
@@ -139,27 +132,24 @@ public class Layout extends JPanel
 	
 	public void printProgram()
 	{
-		System.out.println( main );
-		Set done = new HashSet();
-		Piece.Label now = main;
-		Piece.Label next;
-		do
+		new Run( this );
+	}
+
+	public Piece.Label getMain()
+	{
+		return main;
+	}
+
+	protected void snap( Piece.Label piece )
+	{
+		Point snap = null;
+		for ( int i = 0; i < getComponentCount(); i++ )
 		{
-			next = null;
-			for ( int i = 0; i < getComponentCount(); i++ )
-			{
-				Piece.Label piece = (Piece.Label)getComponent( i );
-				if ( piece != now && !done.contains( piece ) &&
-					 piece.getPiece().connected( now.getPiece() ) )
-				{
-					next = piece;
-					System.out.println( piece );
-					continue;
-				}
-			}
-			done.add( now );
-			now = next;
+			Component component = getComponent( i );
+			if ( component != piece )
+				snap = Piece.closest( ( (Piece.Label)component ).getPiece().snap( piece.getPiece() ), snap, piece.getLocation() );
 		}
-		while ( now != null );
+		if ( snap != null )
+			piece.setLocation( snap );
 	}
 }

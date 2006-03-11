@@ -21,11 +21,20 @@ public class Piece implements Cloneable
 		this.connectors = connectors;
 	}
 	
+	/**
+	 * Create a deeper copy as we don't want to share connectors or location.
+	 */
 	public Object clone()
 	{
 		try
 		{
-			return super.clone();
+			Piece piece = (Piece)super.clone();
+			piece.connectors = new Connector[ connectors.length ];
+			for ( int i = 0; i < connectors.length; i++ )
+				piece.connectors[ i ] = (Connector)connectors[ i ].clone();
+			if ( location != null )
+				piece.location = (Point)location.clone();
+			return piece;
 		}
 		catch( CloneNotSupportedException e )
 		{
