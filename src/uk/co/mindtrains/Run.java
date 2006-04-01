@@ -3,12 +3,6 @@
  */
 package uk.co.mindtrains;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-
 public class Run extends Thread
 {
 	private Layout layout;

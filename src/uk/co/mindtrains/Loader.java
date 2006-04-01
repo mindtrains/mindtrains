@@ -261,26 +261,4 @@ public class Loader
 	{
 		return tabs;
 	}
-
-	protected static void printContent( Node child )
-	{
-		while ( child != null )
-    	{
-    		if ( child.getNodeType() == Node.ELEMENT_NODE )
-    		{
-    			System.out.print( child.getNodeName() );
-    		
-    			NamedNodeMap attributes = child.getAttributes();
-    			for ( int i = 0; i < attributes.getLength(); i++ )
-    			{
-    				Node attribute = attributes.item( i );
-    				System.out.print(  " " + attribute.getNodeName() + "=" + attribute.getNodeValue() );
-    			}
-    			
-    			System.out.println();
-    			printContent( child.getFirstChild() );
-    		}
-    		child = child.getNextSibling();
-    	}
-	}
 }

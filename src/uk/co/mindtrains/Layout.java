@@ -16,14 +16,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.swing.DesktopManager;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
 
 /**
  * Layout class manages the list of track pieces as the user is
