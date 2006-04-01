@@ -4,7 +4,7 @@
  * To change the template for this generated file go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-package uk.me.wouldbe.train;
+package uk.co.mindtrains;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -35,7 +35,7 @@ public class GUI extends JFrame
 		
 		public GUI()
 		{
-			super( "ProgrammingTrain" );
+			super( "MindTrains" );
 			setDefaultCloseOperation( EXIT_ON_CLOSE );
 			JDesktopPane desktop = new JDesktopPane();
 			desktop.add( createTrackPalette(), JLayeredPane.PALETTE_LAYER );

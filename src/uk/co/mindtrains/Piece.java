@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2006 Andy Wood
  */
-package uk.me.wouldbe.train;
+package uk.co.mindtrains;
 
 import java.awt.Point;
 import java.util.Random;
