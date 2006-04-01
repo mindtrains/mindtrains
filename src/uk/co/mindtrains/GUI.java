@@ -50,7 +50,7 @@ public class GUI extends JFrame
 			
 			desktop.add( layout );
 			setContentPane( desktop );
-			setSize( 876, 634 );
+			setSize( 1022, 730 );
 			setVisible( true );
 			desktop.getDesktopManager().activateFrame( layout );
 		}
@@ -59,14 +59,14 @@ public class GUI extends JFrame
 		{
 			JToolBar toolBar = new JToolBar();
 			toolBar.setFloatable( false );
-			toolBar.setSize( 876, 32 );
+			toolBar.setSize( 1022, 32 );
 			return toolBar;
 		}
 		
 		protected JInternalFrame createLayoutFrame( JDesktopPane desktop )
 		{
 			final JInternalFrame frame = new JInternalFrame( "Track" );
-			frame.setSize( 720, 576 );
+			frame.setSize( 800, 600 );
 			frame.setLocation( 2, 36 );
 			frame.setVisible( true );
 			frame.setContentPane( new Layout( desktop.getDesktopManager(), new Point( 50, 50 ) ) );
@@ -77,12 +77,12 @@ public class GUI extends JFrame
 		{
 		  JInternalFrame palette = new JInternalFrame();
 		  palette.putClientProperty( "JInternalFrame.isPalette", Boolean.TRUE );
-		  palette.setSize( 150, 576 );
-		  palette.setLocation( 724, 36 );
+		  palette.setSize( 218, 600 );
+		  palette.setLocation( 804, 36 );
 		  palette.setVisible( true );
 		  
 		  Container content = new JPanel();
-		  content.setLayout( new GridLayout( 0, 2 ) );
+		  content.setLayout( new GridLayout( 0, 4 ) );
 		  content.add( createTrack( "curve", new ImageIcon( "docs/curve45.png" ), 
 		                            connectors( 1, 19, Connector.SE, 46, 8, Connector.N ) ) );
 		  content.add( createTrack( "curve", new ImageIcon( "docs/curve45-2.png" ), 
@@ -184,5 +184,11 @@ public class GUI extends JFrame
 			new GUI();
 			splash.setVisible( false );
 			splash = null;
+			
+//		    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+//		    dbf.setNamespaceAware(true);
+//		    DocumentBuilder db = dbf.newDocumentBuilder();
+//		    Document doc = db.parse(new File(filename));
+
 		}		
 }
