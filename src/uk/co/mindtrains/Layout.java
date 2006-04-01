@@ -21,6 +21,7 @@ import java.util.Set;
 
 import javax.swing.DesktopManager;
 import javax.swing.ImageIcon;
+import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
@@ -28,14 +29,14 @@ import javax.swing.JPanel;
  * Layout class manages the list of track pieces as the user is
  * putting it together.
  */
-public class Layout extends JPanel
+public class Layout extends JDesktopPane
 {
 	private static final long serialVersionUID = 1L;
 	private Piece.Label dragging;
 	private Piece.Label main;
 	private Point dragOffset;
 	
-	public Layout(final DesktopManager manager, Point start )
+	public Layout( Point start )
 	{
 		setLayout( null );
 		
@@ -114,7 +115,7 @@ public class Layout extends JPanel
 								add( dropped, 0 );
 								repaint();
 								dtde.dropComplete( true );
-								manager.activateFrame( (JInternalFrame)getParent().getParent().getParent() );
+								//getDesktopManager().activateFrame( (JInternalFrame)getParent().getParent().getParent() );
 							}
 							catch ( UnsupportedFlavorException e )
 							{
@@ -146,7 +147,7 @@ public class Layout extends JPanel
 		for ( int i = 0; i < getComponentCount(); i++ )
 		{
 			Component component = getComponent( i );
-			if ( component != piece )
+			if ( component != piece && component instanceof Piece.Label )
 				snap = Piece.closest( ( (Piece.Label)component ).getPiece().snap( piece.getPiece() ), snap, piece.getLocation() );
 		}
 		if ( snap != null )

@@ -15,6 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
@@ -28,6 +29,13 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.TransferHandler;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 public class GUI extends JFrame
 {
@@ -37,22 +45,23 @@ public class GUI extends JFrame
 		{
 			super( "MindTrains" );
 			setDefaultCloseOperation( EXIT_ON_CLOSE );
-			JDesktopPane desktop = new JDesktopPane();
-			desktop.add( createTrackPalette(), JLayeredPane.PALETTE_LAYER );
+			final Layout layout = new Layout( new Point( 50, 50 ) );
+			layout.add( createTrackPalette(), JLayeredPane.PALETTE_LAYER );
 			JToolBar toolBar = createToolBar();
-			desktop.add( toolBar, BorderLayout.NORTH );
-			final JInternalFrame layout = createLayoutFrame( desktop );
+			layout.add( toolBar, BorderLayout.NORTH );
+
+			//final JInternalFrame layout = createLayoutFrame( desktop );
 			
 			toolBar.add( new AbstractAction() {
 				public void actionPerformed(ActionEvent arg0) {
-					( (Layout)layout.getContentPane() ).printProgram();
+					( (Layout)layout ).printProgram();
 				}} );
 			
-			desktop.add( layout );
-			setContentPane( desktop );
+			//layout.add( layout );
+			setContentPane( layout );
 			setSize( 1022, 730 );
 			setVisible( true );
-			desktop.getDesktopManager().activateFrame( layout );
+			//layout.getDesktopManager().activateFrame( layout );
 		}
 
 		private JToolBar createToolBar()
@@ -63,15 +72,15 @@ public class GUI extends JFrame
 			return toolBar;
 		}
 		
-		protected JInternalFrame createLayoutFrame( JDesktopPane desktop )
-		{
-			final JInternalFrame frame = new JInternalFrame( "Track" );
-			frame.setSize( 800, 600 );
-			frame.setLocation( 2, 36 );
-			frame.setVisible( true );
-			frame.setContentPane( new Layout( desktop.getDesktopManager(), new Point( 50, 50 ) ) );
-			return frame;
-		}
+//		protected JInternalFrame createLayoutFrame( JDesktopPane desktop )
+//		{
+//			final JInternalFrame frame = new JInternalFrame( "Track" );
+//			frame.setSize( 800, 600 );
+//			frame.setLocation( 2, 36 );
+//			frame.setVisible( true );
+//			frame.setContentPane( new Layout( desktop.getDesktopManager(), new Point( 50, 50 ) ) );
+//			return frame;
+//		}
 		
 		protected JInternalFrame createTrackPalette()
 		{
@@ -185,10 +194,36 @@ public class GUI extends JFrame
 			splash.setVisible( false );
 			splash = null;
 			
-//		    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-//		    dbf.setNamespaceAware(true);
-//		    DocumentBuilder db = dbf.newDocumentBuilder();
-//		    Document doc = db.parse(new File(filename));
+		    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		    dbf.setNamespaceAware( true );
+		    DocumentBuilder db = dbf.newDocumentBuilder();
+		    Document doc = db.parse( new File( "docs/pieces.xml" ) );
 
-		}		
+		    Element element = doc.getDocumentElement();
+	    	Node child = element.getFirstChild();
+	    	printContent( child );
+
+		}
+
+		protected static void printContent( Node child )
+		{
+			while ( child != null )
+	    	{
+	    		if ( child.getNodeType() == Node.ELEMENT_NODE )
+	    		{
+	    			System.out.print( child.getNodeName() );
+	    		
+	    			NamedNodeMap attributes = child.getAttributes();
+	    			for ( int i = 0; i < attributes.getLength(); i++ )
+	    			{
+	    				Node attribute = attributes.item( i );
+	    				System.out.print(  " " + attribute.getNodeName() + "=" + attribute.getNodeValue() );
+	    			}
+	    			
+	    			System.out.println();
+	    			printContent( child.getFirstChild() );
+	    		}
+	    		child = child.getNextSibling();
+	    	}
+		}	
 }
