@@ -117,7 +117,7 @@ public class Loader
     		child = child.getNextSibling();
     	}	
 		
-		Piece piece = new Piece( image, (Connector[])connectors.toArray( new Connector[ 0 ] ) );
+		Piece piece = new Piece( name, image, (Connector[])connectors.toArray( new Connector[ 0 ] ) );
 		set.put( name, piece );
 	}
 	

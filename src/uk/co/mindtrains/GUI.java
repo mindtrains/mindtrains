@@ -28,6 +28,7 @@ public class GUI extends JFrame
 		
 		Loader loader = new Loader();
 		loader.parse( "docs/pieces.xml" );
+		loader.parse( "docs/saved.xml" );
 		
 		final Layout layout = new Layout( new Point( 50, 50 ) );
 		loader.addLand( layout );

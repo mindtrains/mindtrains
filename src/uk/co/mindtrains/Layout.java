@@ -186,8 +186,15 @@ public class Layout extends JDesktopPane
 
 	public void save()
 	{
-		Saver saver = new Saver( this );
-		saver.save( "docs/saved.xml" );
+		try
+		{
+			Saver saver = new Saver( this );
+			saver.save( "docs/saved.xml" );
+		}
+		catch ( IOException e )
+		{
+			e.printStackTrace( System.err );
+		}
 	}
 
 }
