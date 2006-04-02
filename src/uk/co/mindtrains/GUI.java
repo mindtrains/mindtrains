@@ -11,6 +11,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
@@ -38,14 +39,24 @@ public class GUI extends JFrame
 		JToolBar toolBar = createToolBar();
 		layout.add( toolBar, BorderLayout.NORTH );
 		
-		toolBar.add( new AbstractAction() {
+		toolBar.add( new AbstractAction( "Save", new ImageIcon( "docs/save.png" ) ) {
+			private static final long serialVersionUID = 1L;
+			public void actionPerformed(ActionEvent arg0)
+			{
+				( (Layout)layout ).save();
+			}
+		} );
+
+		toolBar.addSeparator();
+		
+		toolBar.add( new AbstractAction( "Run", new ImageIcon( "docs/run.png" ) ) {
 			private static final long serialVersionUID = 1L;
 			public void actionPerformed(ActionEvent arg0)
 			{
 				( (Layout)layout ).printProgram();
 			}
 		} );
-		
+
 		setContentPane( layout );
 		setSize( 1022, 730 );
 		setVisible( true );

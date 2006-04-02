@@ -184,4 +184,10 @@ public class Layout extends JDesktopPane
 			piece.setLocation( snap );
 	}
 
+	public void save()
+	{
+		Saver saver = new Saver( this );
+		saver.save( "docs/saved.xml" );
+	}
+
 }
