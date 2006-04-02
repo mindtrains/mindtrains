@@ -4,7 +4,6 @@
 package uk.co.mindtrains;
 
 import java.awt.GraphicsEnvironment;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -23,7 +22,6 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
@@ -31,22 +29,17 @@ public class IconTransferHandler extends TransferHandler
 {
 	private static final long serialVersionUID = 1L;
 	public static final DataFlavor NATIVE_FLAVOR = new DataFlavor( Icon.class, DataFlavor.javaJVMLocalObjectMimeType );
-	Image image;
+	private Icon icon;
     private static SwingDragGestureRecognizer recognizer = null;
 
-	public IconTransferHandler( Image image )
+	public IconTransferHandler( Icon icon )
 	{
-		this.image = image;
-	}
-	
-	public Image getImage()
-	{
-		return image;
+		this.icon = icon;
 	}
 	
 	public Point getOffset()
 	{
-		return new Point( -image.getWidth(null), -image.getHeight(null) );
+		return new Point( -icon.getIconWidth(), -icon.getIconHeight() );
 	}
 	
     public void exportAsDrag(JComponent comp, InputEvent e, int action) {
@@ -68,7 +61,7 @@ public class IconTransferHandler extends TransferHandler
 
 	public Icon getVisualRepresentation( Transferable arg0 )
 	{
-		return new ImageIcon( image );
+		return icon;
 	}
 
 	public int getSourceActions( JComponent c )
@@ -152,7 +145,7 @@ public class IconTransferHandler extends TransferHandler
                 scrolls = c.getAutoscrolls();
                 c.setAutoscrolls(false);
                 try {
-                    dge.startDrag(null, th.getImage(), th.getOffset(), t, this);
+                    dge.startDrag(null, t, this);
                     return;
                 } catch (RuntimeException re) {
                     c.setAutoscrolls(scrolls);

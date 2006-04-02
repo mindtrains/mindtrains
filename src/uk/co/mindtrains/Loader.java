@@ -34,8 +34,9 @@ public class Loader
 	private String dir;
 	private Map set = new HashMap();
 	private JTabbedPane tabs = new JTabbedPane();
+	private List land = new ArrayList();
 	
-	public Loader( String filename ) throws Exception
+	public void parse( String filename ) throws Exception
 	{
 	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 	    dbf.setNamespaceAware( true );
@@ -116,16 +117,7 @@ public class Loader
     		child = child.getNextSibling();
     	}	
 		
-		Piece.Label piece = new Piece( image, (Connector[])connectors.toArray( new Connector[ 0 ] ) ).new Label();
-		piece.setTransferHandler( new IconTransferHandler( ( (ImageIcon)image ).getImage() ));
-		MouseListener ml = new MouseAdapter() {
-		    public void mousePressed(MouseEvent e) {
-		        JComponent c = (JComponent)e.getSource();
-		        TransferHandler th = c.getTransferHandler();
-		        th.exportAsDrag(c, e, TransferHandler.COPY);
-		    }
-		};
-		piece.addMouseListener(ml);
+		Piece piece = new Piece( image, (Connector[])connectors.toArray( new Connector[ 0 ] ) );
 		set.put( name, piece );
 	}
 	
@@ -221,7 +213,19 @@ public class Loader
     		if ( child.getNodeType() == Node.ELEMENT_NODE )
     		{
     			if ( child.getNodeName().equalsIgnoreCase( "piece" ) )
-    				content.add( parsePieceRef( child ) );
+    			{
+    				Piece.Label label = parsePieceRef( child ).new Label();
+    				label.setTransferHandler( new IconTransferHandler( label.getIcon() ) );
+    				MouseListener ml = new MouseAdapter() {
+    				    public void mousePressed(MouseEvent e) {
+    				        JComponent c = (JComponent)e.getSource();
+    				        TransferHandler th = c.getTransferHandler();
+    				        th.exportAsDrag(c, e, TransferHandler.COPY);
+    				    }
+    				};
+    				label.addMouseListener(ml);
+    				content.add( label );
+    			}
     			else
     				throw new Exception( "Unexpected <" + child.getNodeName() + "> element" );
     		}
@@ -231,12 +235,12 @@ public class Loader
 		tabs.addTab( name, content );
 	}
 
-	protected Piece.Label parsePieceRef( Node node )
+	protected Piece parsePieceRef( Node node )
 	{
 		System.out.println( "\t\t\tpiece (ref)" );
 		NamedNodeMap attributes = node.getAttributes();
 		String ref = attributes.getNamedItem( "ref" ).getNodeValue();
-		return (Piece.Label)set.get( ref );
+		return (Piece)set.get( ref );
 	}
 
 	protected void parseLand( Node node ) throws Exception
@@ -249,7 +253,7 @@ public class Loader
     		if ( child.getNodeType() == Node.ELEMENT_NODE )
     		{
     			if ( child.getNodeName().equalsIgnoreCase( "piece" ) )
-    				parsePieceRef( child );
+    				land.add( parsePieceRefPoint( child ) );
     			else
     				throw new Exception( "Unexpected <" + child.getNodeName() + "> element" );
     		}
@@ -257,8 +261,38 @@ public class Loader
     	}
 	}
 	
-	public JTabbedPane getTabs()
+	protected static class PiecePoint
 	{
-		return tabs;
+		protected Piece piece;
+		protected Point point;
+	}
+	
+	private PiecePoint parsePieceRefPoint( Node node )
+	{
+		PiecePoint piecePoint = new PiecePoint();
+		NamedNodeMap attributes = node.getAttributes();
+		int x = Integer.parseInt( attributes.getNamedItem( "x" ).getNodeValue() );
+		int y = Integer.parseInt( attributes.getNamedItem( "y" ).getNodeValue() );
+		// boolean fixed = Boolean.valueOf( attributes.getNamedItem( "fixed" ).getNodeValue() ).booleanValue();
+		piecePoint.point = new Point( x, y );
+		piecePoint.piece = parsePieceRef( node );
+		return piecePoint;
+	}
+
+	public void addTabs( Container contentPane )
+	{
+		contentPane.add( tabs );
+	}
+
+	public void addLand( Layout layout )
+	{
+		for ( int i = 0; i < land.size(); i++ )
+		{
+			PiecePoint piecePoint = (PiecePoint)land.get( i );
+			Piece piece = (Piece)piecePoint.piece.clone();
+			Piece.Label label = layout.add( piece, piecePoint.point, false );
+			if ( i == 0 )
+				layout.setMain( label );
+		}		
 	}
 }

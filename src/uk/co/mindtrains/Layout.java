@@ -17,8 +17,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 
-import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
+
+import uk.co.mindtrains.Piece.Label;
 
 /**
  * Layout class manages the list of track pieces as the user is
@@ -34,12 +35,6 @@ public class Layout extends JDesktopPane
 	public Layout( Point start )
 	{
 		setLayout( null );
-		
-		main = new Piece( new ImageIcon( "docs/tunnel.png" ),
-						  new Connector[] { new Connector( new Point( 16, 14 ), Connector.N ) } ).new Label();
-		main.setSize( 16, 20 );
-		main.setLocation( start );
-		add( main, 0 );
 		
 		addMouseListener( new MouseAdapter()
 		{
@@ -100,17 +95,11 @@ public class Layout extends JDesktopPane
 							 try
 							{
 								Piece piece = (Piece)dtde.getTransferable().getTransferData( IconTransferHandler.NATIVE_FLAVOR );
-					        	Piece.Label dropped = piece.new Label();
 					        	Point location = new Point( dtde.getLocation() );
 					        	location.translate( -piece.getIcon().getIconWidth(), -piece.getIcon().getIconHeight() );
-					        	dropped.setLocation( location );
-								snap( dropped );
-								dropped.setSize( piece.getIcon().getIconWidth(), piece.getIcon().getIconHeight() );
-								dropped.setOpaque( false );
-								add( dropped, 0 );
+								add( piece, location, true );
 								repaint();
 								dtde.dropComplete( true );
-								//getDesktopManager().activateFrame( (JInternalFrame)getParent().getParent().getParent() );
 							}
 							catch ( UnsupportedFlavorException e )
 							{
@@ -126,9 +115,26 @@ public class Layout extends JDesktopPane
 		               true );
 	}
 	
+	public Piece.Label add( Piece piece, Point location, boolean snap )
+	{
+		Piece.Label label = piece.new Label();
+    	label.setLocation( location );
+    	if ( snap )
+    		snap( label );
+    	label.setSize( piece.getIcon().getIconWidth(), piece.getIcon().getIconHeight() );
+    	label.setOpaque( false );
+		add( label, 0 );
+		return label;
+	}
+
 	public void printProgram()
 	{
 		new Run( this );
+	}
+
+	public void setMain( Label main )
+	{
+		this.main = main;
 	}
 
 	public Piece.Label getMain()
@@ -148,4 +154,5 @@ public class Layout extends JDesktopPane
 		if ( snap != null )
 			piece.setLocation( snap );
 	}
+
 }

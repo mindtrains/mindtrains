@@ -22,34 +22,42 @@ public class GUI extends JFrame
 		
 	public GUI() throws Exception
 	{
-			super( "MindTrains" );
-			setDefaultCloseOperation( EXIT_ON_CLOSE );
-			final Layout layout = new Layout( new Point( 50, 50 ) );
-			layout.add( createTrackPalette(), JLayeredPane.PALETTE_LAYER );
-			JToolBar toolBar = createToolBar();
-			layout.add( toolBar, BorderLayout.NORTH );
-
-			//final JInternalFrame layout = createLayoutFrame( desktop );
-			
-			toolBar.add( new AbstractAction() {
-				public void actionPerformed(ActionEvent arg0) {
-					( (Layout)layout ).printProgram();
-				}} );
-			
-			//layout.add( layout );
-			setContentPane( layout );
-			setSize( 1022, 730 );
-			setVisible( true );
-			//layout.getDesktopManager().activateFrame( layout );
+		super( "MindTrains" );
+		setDefaultCloseOperation( EXIT_ON_CLOSE );
+		
+		Loader loader = new Loader();
+		loader.parse( "docs/pieces.xml" );
+		
+		final Layout layout = new Layout( new Point( 50, 50 ) );
+		loader.addLand( layout );
+		
+		JInternalFrame palette = createTrackPalette();
+		loader.addTabs( palette.getContentPane() );
+		layout.add( palette, JLayeredPane.PALETTE_LAYER );
+		
+		JToolBar toolBar = createToolBar();
+		layout.add( toolBar, BorderLayout.NORTH );
+		
+		toolBar.add( new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+			public void actionPerformed(ActionEvent arg0)
+			{
+				( (Layout)layout ).printProgram();
+			}
+		} );
+		
+		setContentPane( layout );
+		setSize( 1022, 730 );
+		setVisible( true );
 	}
 
-		private JToolBar createToolBar()
-		{
-			JToolBar toolBar = new JToolBar();
-			toolBar.setFloatable( false );
-			toolBar.setSize( 1022, 32 );
-			return toolBar;
-		}
+	private JToolBar createToolBar()
+	{
+		JToolBar toolBar = new JToolBar();
+		toolBar.setFloatable( false );
+		toolBar.setSize( 1022, 32 );
+		return toolBar;
+	}
 			
     protected JInternalFrame createTrackPalette() throws Exception
 	{
@@ -58,10 +66,6 @@ public class GUI extends JFrame
     	palette.setSize( 218, 600 );
     	palette.setLocation( 804, 36 );
     	palette.setVisible( true );
-
-    	Loader loader = new Loader( "docs/pieces.xml" );
-		palette.getContentPane().add( loader.getTabs() );
-
 		return palette;
 	}
 		
