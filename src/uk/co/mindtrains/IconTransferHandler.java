@@ -4,6 +4,7 @@
 package uk.co.mindtrains;
 
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -19,6 +20,7 @@ import java.awt.dnd.DragSourceEvent;
 import java.awt.dnd.DragSourceListener;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.swing.Icon;
@@ -28,18 +30,33 @@ import javax.swing.TransferHandler;
 public class IconTransferHandler extends TransferHandler
 {
 	private static final long serialVersionUID = 1L;
-	public static final DataFlavor NATIVE_FLAVOR = new DataFlavor( Icon.class, DataFlavor.javaJVMLocalObjectMimeType );
+	public static final DataFlavor NATIVE_FLAVOR = new DataFlavor( Piece.class, DataFlavor.javaJVMLocalObjectMimeType );
 	private Icon icon;
     private static SwingDragGestureRecognizer recognizer = null;
-
+    private static Layout layout;
+    
 	public IconTransferHandler( Icon icon )
 	{
 		this.icon = icon;
 	}
 	
+	public static void setLayout( Layout layout )
+	{
+		IconTransferHandler.layout = layout;
+	}
+	
 	public Point getOffset()
 	{
 		return new Point( -icon.getIconWidth(), -icon.getIconHeight() );
+	}
+
+	/**
+	 * Create empty drag image so we can see ours below it, and avoid the silly sized
+	 * outline border provided automatically.
+	 */
+	public Image getImage()
+	{
+		return new BufferedImage( icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB_PRE );
 	}
 	
     public void exportAsDrag(JComponent comp, InputEvent e, int action) {
@@ -69,11 +86,12 @@ public class IconTransferHandler extends TransferHandler
 		return TransferHandler.COPY;
 	}
 
-	protected Transferable createTransferable( final JComponent c )
+	protected Transferable createTransferable( JComponent c )
 	{
+		final Piece piece = (Piece)( (Piece.Label)c ).getPiece().clone();
+		layout.setDragging( piece.new Label() );
 		return new Transferable()
 		{
-
 			public DataFlavor[] getTransferDataFlavors()
 			{
 				return new DataFlavor[] { NATIVE_FLAVOR };
@@ -86,14 +104,11 @@ public class IconTransferHandler extends TransferHandler
 
 			public Object getTransferData( DataFlavor flavor ) throws UnsupportedFlavorException, IOException
 			{
-				return ( (Piece.Label)c ).getPiece().clone();
+				return piece;
 			}
-			
 		};
 	}
 
-
-	
 
     private static class SwingDragGestureRecognizer extends DragGestureRecognizer
     {
@@ -145,7 +160,7 @@ public class IconTransferHandler extends TransferHandler
                 scrolls = c.getAutoscrolls();
                 c.setAutoscrolls(false);
                 try {
-                    dge.startDrag(null, t, this);
+                    dge.startDrag( null, th.getImage(), th.getOffset(), t, this );
                     return;
                 } catch (RuntimeException re) {
                     c.setAutoscrolls(scrolls);
@@ -192,5 +207,4 @@ public class IconTransferHandler extends TransferHandler
         public void dropActionChanged(DragSourceDragEvent dsde) {
 	}
     }
-
 }

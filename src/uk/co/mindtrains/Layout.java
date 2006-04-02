@@ -5,6 +5,7 @@ package uk.co.mindtrains;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -31,6 +32,7 @@ public class Layout extends JDesktopPane
 	private Piece.Label dragging;
 	private Piece.Label main;
 	private Point dragOffset;
+	private Rectangle draggingRect = new Rectangle();
 	
 	public Layout( Point start )
 	{
@@ -72,12 +74,21 @@ public class Layout extends JDesktopPane
 		                {
 						public void dragEnter( DropTargetDragEvent dtde )
 						{
-							 dtde.acceptDrag(DnDConstants.ACTION_COPY);
+							dtde.acceptDrag(DnDConstants.ACTION_COPY);
+//							add( dragging, JLayeredPane.DRAG_LAYER );
+//							dragging.setLocation( dtde.getLocation() );
+							draggingRect.setRect( dtde.getLocation().x, dtde.getLocation().y,
+							                       dragging.getIcon().getIconWidth(), dragging.getIcon().getIconHeight() );
+							dragging.getIcon().paintIcon( Layout.this, getGraphics(), draggingRect.x, draggingRect.y );
 						}
 
 						public void dragOver( DropTargetDragEvent dtde )
 						{
-							 dtde.acceptDrag(DnDConstants.ACTION_COPY);
+							dtde.acceptDrag(DnDConstants.ACTION_COPY);
+							paintImmediately( draggingRect.getBounds() );
+							draggingRect.setRect( dtde.getLocation().x, dtde.getLocation().y,
+							                      dragging.getIcon().getIconWidth(), dragging.getIcon().getIconHeight() );
+							dragging.getIcon().paintIcon( Layout.this, getGraphics(), draggingRect.x, draggingRect.y );							
 						}
 
 						public void dropActionChanged( DropTargetDragEvent dtde )
@@ -87,6 +98,7 @@ public class Layout extends JDesktopPane
 
 						public void dragExit( DropTargetEvent dte )
 						{
+							paintImmediately( draggingRect.getBounds() );
 						}
 
 						public void drop( DropTargetDropEvent dtde )
@@ -113,8 +125,15 @@ public class Layout extends JDesktopPane
 			
 		               },
 		               true );
+
+		IconTransferHandler.setLayout( this );
 	}
 	
+	public void setDragging( Piece.Label dragging )
+	{
+		this.dragging = dragging;
+	}
+
 	public Piece.Label add( Piece piece, Point location, boolean snap )
 	{
 		Piece.Label label = piece.new Label();
