@@ -91,6 +91,8 @@ public class Piece implements Cloneable
 		public Label()
 		{
 			super( icon );
+	    	setSize( icon.getIconWidth(), icon.getIconHeight() );
+	    	setOpaque( false );
 		}
 		
 		Piece getPiece()

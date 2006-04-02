@@ -19,6 +19,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 
 import javax.swing.JDesktopPane;
+import javax.swing.JLayeredPane;
 
 import uk.co.mindtrains.Piece.Label;
 
@@ -52,7 +53,7 @@ public class Layout extends JDesktopPane
 					repaint();
 				}
 				else
-					piece = null;
+					dragging = null;
 			}
 		} );
 
@@ -75,20 +76,28 @@ public class Layout extends JDesktopPane
 						public void dragEnter( DropTargetDragEvent dtde )
 						{
 							dtde.acceptDrag(DnDConstants.ACTION_COPY);
-//							add( dragging, JLayeredPane.DRAG_LAYER );
-//							dragging.setLocation( dtde.getLocation() );
-							draggingRect.setRect( dtde.getLocation().x, dtde.getLocation().y,
-							                       dragging.getIcon().getIconWidth(), dragging.getIcon().getIconHeight() );
-							dragging.getIcon().paintIcon( Layout.this, getGraphics(), draggingRect.x, draggingRect.y );
+							add( dragging, JLayeredPane.DRAG_LAYER );
+							Point location = new Point( dtde.getLocation() );
+				        	location.translate( -dragging.getIcon().getIconWidth(), -dragging.getIcon().getIconHeight() );
+							dragging.setLocation( location );
+							snap( dragging );
+							draggingRect.setRect( dragging.getLocation().x, dragging.getLocation().y,
+							                      dragging.getIcon().getIconWidth(), dragging.getIcon().getIconHeight() );
+							paintImmediately( draggingRect );
 						}
 
 						public void dragOver( DropTargetDragEvent dtde )
 						{
 							dtde.acceptDrag(DnDConstants.ACTION_COPY);
-							paintImmediately( draggingRect.getBounds() );
-							draggingRect.setRect( dtde.getLocation().x, dtde.getLocation().y,
-							                      dragging.getIcon().getIconWidth(), dragging.getIcon().getIconHeight() );
-							dragging.getIcon().paintIcon( Layout.this, getGraphics(), draggingRect.x, draggingRect.y );							
+							Point location = new Point( dtde.getLocation() );
+				        	location.translate( -dragging.getIcon().getIconWidth(), -dragging.getIcon().getIconHeight() );
+							dragging.setLocation( location );
+							snap( dragging );
+							Rectangle newRect = new Rectangle( dragging.getLocation().x, dragging.getLocation().y,
+							                                   dragging.getIcon().getIconWidth(), dragging.getIcon().getIconHeight() );
+							draggingRect.add( newRect );
+							paintImmediately( draggingRect );
+							draggingRect = newRect;
 						}
 
 						public void dropActionChanged( DropTargetDragEvent dtde )
@@ -98,13 +107,16 @@ public class Layout extends JDesktopPane
 
 						public void dragExit( DropTargetEvent dte )
 						{
-							paintImmediately( draggingRect.getBounds() );
+							remove( dragging );
+							paintImmediately( draggingRect );
 						}
 
 						public void drop( DropTargetDropEvent dtde )
 						{
-							 dtde.acceptDrop( DnDConstants.ACTION_COPY );
-							 try
+							dtde.acceptDrop( DnDConstants.ACTION_COPY );
+							remove( dragging );
+							paintImmediately( draggingRect );
+							try
 							{
 								Piece piece = (Piece)dtde.getTransferable().getTransferData( IconTransferHandler.NATIVE_FLAVOR );
 					        	Point location = new Point( dtde.getLocation() );
@@ -140,8 +152,6 @@ public class Layout extends JDesktopPane
     	label.setLocation( location );
     	if ( snap )
     		snap( label );
-    	label.setSize( piece.getIcon().getIconWidth(), piece.getIcon().getIconHeight() );
-    	label.setOpaque( false );
 		add( label, 0 );
 		return label;
 	}
