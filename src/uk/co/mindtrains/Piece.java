@@ -14,21 +14,21 @@ public class Piece implements Cloneable
 	private static final long serialVersionUID = 1L;
 	private static final Random random = new Random( System.currentTimeMillis() );
 
-	private String name;
+	private String id;
 	private Icon icon;
-	private Connector[] connectors;
+	protected Connector[] connectors;
 	private Point location;
 
-	public Piece( String name, Icon icon, Connector[] connectors )
+	public Piece( String id, Icon icon, Connector[] connectors )
 	{
-		this.name = name;
+		this.id = id;
 		this.icon = icon;
 		this.connectors = connectors;
 	}
 	
-	public String getName()
+	public String getId()
 	{
-		return name;
+		return id;
 	}
 
 	/**

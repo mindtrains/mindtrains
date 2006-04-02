@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -95,12 +96,12 @@ public class Loader
 	protected void parsePiece( Node node ) throws Exception
 	{
 		System.out.println( "\t\tpiece" );
-		String name = node.getAttributes().getNamedItem( "name" ).getNodeValue();
-		String clazz = node.getAttributes().getNamedItem( "class" ).getNodeValue();
+		String id = node.getAttributes().getNamedItem( "id" ).getNodeValue();
+		String classname = node.getAttributes().getNamedItem( "class" ).getNodeValue();
 		List connectors = new ArrayList();
 		Icon image = null;
 		
-		System.out.println( name + " " + clazz );
+		System.out.println( id + " " + classname );
 		
 		Node child = node.getFirstChild();
 		while ( child != null )
@@ -115,10 +116,13 @@ public class Loader
     				throw new Exception( "Unexpected <" + child.getNodeName() + "> element" );
     		}
     		child = child.getNextSibling();
-    	}	
+    	}
 		
-		Piece piece = new Piece( name, image, (Connector[])connectors.toArray( new Connector[ 0 ] ) );
-		set.put( name, piece );
+		Class clazz = Class.forName( classname );
+		
+		Constructor constructor = clazz.getConstructor( new Class[] { String.class, Icon.class, Connector[].class } );
+		Piece piece = (Piece)constructor.newInstance( new Object[] { id, image, (Connector[])connectors.toArray( new Connector[ 0 ] ) } );		
+		set.put( id, piece );
 	}
 	
 	protected Icon parseImage( Node node )
