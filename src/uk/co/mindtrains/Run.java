@@ -27,6 +27,7 @@ public class Run extends Thread
 		do
 		{
 			Connector exit = now.getPiece().travel( train, entry );
+			train.setLocation( exit.midlocation() );
 			for ( int i = 0; i < layout.getComponentCount(); i++ )
 			{
 				if ( layout.getComponent( i ) instanceof Piece.Label )

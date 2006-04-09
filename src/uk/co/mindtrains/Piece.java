@@ -132,13 +132,9 @@ public class Piece implements Cloneable
 	{
 		System.err.println( "connectors: " + connectors.length + " " + entry );
 		if ( connectors.length == 1 )
-		{
-			train.setLocation( connectors[ 0 ].midlocation() );
 			return connectors[ 0 ];
-		}
 		else
 		{
-			train.setLocation( entry.midlocation() );
 	    	int i;
 	    	do
 	    		i = random.nextInt( connectors.length );
