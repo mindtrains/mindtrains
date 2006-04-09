@@ -289,6 +289,7 @@ public class Loader
     		{
     			if ( child.getNodeName().equalsIgnoreCase( "property" ) )
     				System.out.println( "\t\t\t\tproperty" );
+    				// TODO deal with cloning too
     				//image = parseImage( child );
     			else
     				throw new Exception( "Unexpected <" + child.getNodeName() + "> element" );

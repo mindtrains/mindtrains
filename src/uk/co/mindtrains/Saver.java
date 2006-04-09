@@ -4,6 +4,8 @@
 package uk.co.mindtrains;
 
 import java.awt.Component;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -40,7 +42,17 @@ public class Saver
 				else
 				{
 					writer.println( ">" );
-					writer.println( "      <property name=\"\" value=\"\" />" );
+		    		try
+					{
+						PropertyDescriptor[] descriptors = Introspector.getBeanInfo( properties.getClass(), Object.class ).getPropertyDescriptors();
+						for ( int j = 0; j < descriptors.length; j++ )
+							writer.println( "      <property name=\"" + descriptors[ j ].getName() + "\" value=\"" +
+							                descriptors[ j ].getReadMethod().invoke( properties, null ) + "\" />" );
+					}
+					catch ( Exception e )
+					{
+						e.printStackTrace( System.err );
+					}
 					writer.println( "    </piece>" );
 				}
 			}
