@@ -15,6 +15,10 @@ public class Run extends Thread
 
 	public void run()
 	{
+		for ( int i = 0; i < layout.getComponentCount(); i++ )
+			if ( layout.getComponent( i ) instanceof Piece.Label )
+				( (Piece.Label)layout.getComponent( i ) ).getPiece().reset();
+
 		Train train = new Train();
 		layout.add( train, 0 );
 		

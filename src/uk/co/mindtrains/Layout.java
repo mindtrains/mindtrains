@@ -16,10 +16,19 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JLayeredPane;
+
+import com.l2fprod.common.propertysheet.DefaultProperty;
+import com.l2fprod.common.propertysheet.Property;
+import com.l2fprod.common.propertysheet.PropertySheetTableModel;
 
 import uk.co.mindtrains.Piece.Label;
 
@@ -34,9 +43,12 @@ public class Layout extends JDesktopPane
 	private Piece.Label main;
 	private Point dragOffset;
 	private Rectangle draggingRect = new Rectangle();
+	private PropertySheetTableModel model;
 	
-	public Layout( Point start )
+	public Layout( Point start, PropertySheetTableModel m )
 	{
+		model = m;
+		
 		setLayout( null );
 		
 		addMouseListener( new MouseAdapter()
@@ -50,6 +62,7 @@ public class Layout extends JDesktopPane
 					dragOffset = new Point( e.getX() - piece.getX(), e.getY() - piece.getY() );
 					remove( piece );
 					add( piece, 0 );
+					model.setProperties( createProperties( dragging.getPiece().getProperties() ) );
 					repaint();
 				}
 				else
@@ -197,4 +210,38 @@ public class Layout extends JDesktopPane
 		}
 	}
 
+    private Property[] createProperties( final Object object )
+	{
+    	if ( object != null )
+    	{
+			try
+			{
+	    		PropertyDescriptor[] descriptors = Introspector.getBeanInfo( object.getClass(), Object.class ).getPropertyDescriptors();
+	    		Property[] properties = new Property[ descriptors.length ];
+	    	             
+		    	for ( int i = 0; i < descriptors.length; i++ )
+		    	{
+		    		final DefaultProperty property = new DefaultProperty();
+		    		property.setName( descriptors[ i ].getName() );
+		    		property.setDisplayName( descriptors[ i ].getDisplayName() );
+		    		property.setType( descriptors[ i ].getPropertyType() );
+		    		property.readFromObject( object );
+		    		property.addPropertyChangeListener( new PropertyChangeListener() {
+						public void propertyChange( PropertyChangeEvent arg0 )
+						{
+							property.writeToObject( object );
+						}
+		    			
+		    		} );
+		    		properties[ i ] = property;
+		    	}
+				return properties;
+			}
+			catch ( IntrospectionException e )
+			{
+				e.printStackTrace( System.err );
+			}
+    	}
+    	return new Property[ 0 ];
+	}
 }

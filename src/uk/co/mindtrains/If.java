@@ -7,7 +7,23 @@ import javax.swing.Icon;
 
 public class If extends Piece
 {
-	boolean travelled = false;
+	public static class Limit
+	{
+		int maximum;
+
+		public int getMaximum()
+		{
+			return maximum;
+		}
+
+		public void setMaximum( int maximum )
+		{
+			this.maximum = maximum;
+		}	
+	}
+	
+	int travelled;
+	Limit limit = new Limit();
 	
 	/**
 	 * Really important that first connector is in with 2 & 3 as out
@@ -17,13 +33,18 @@ public class If extends Piece
 		super( id, icon, connectors );
 	}
 
+	public void reset()
+	{
+		travelled = 0;
+	}
+	
 	public Connector travel( Train train, Connector entry )
 	{
 		if ( entry == connectors[ 0 ] )
 		{
-			if ( !travelled )
+			if ( travelled < limit.getMaximum() )
 			{
-				travelled = true;
+				travelled++;
 				return connectors[ 1 ];
 			}
 			else
@@ -31,5 +52,10 @@ public class If extends Piece
 		}
 		else
 			return connectors[ 0 ];
+	}
+	
+	public Object getProperties()
+	{
+		return limit;
 	}
 }

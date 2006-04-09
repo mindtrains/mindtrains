@@ -120,6 +120,14 @@ public class Piece implements Cloneable
 		}
 	}
 
+	/**
+	 * Called before each 'run' of the program to reset any state.  Subclasses should
+	 * override this as necessary.
+	 */
+	public void reset()
+	{
+	}
+	
 	public Connector travel( Train train, Connector entry )
 	{
 		System.err.println( "connectors: " + connectors.length + " " + entry );
@@ -154,5 +162,13 @@ public class Piece implements Cloneable
 	public Icon getIcon()
 	{
 		return icon;
+	}
+	
+	/**
+	 * Subclasses should override this to return a bean that allows them to be customised.
+	 */
+	public Object getProperties()
+	{
+		return null;
 	}
 }

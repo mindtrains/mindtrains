@@ -9,6 +9,7 @@ package uk.co.mindtrains;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.beans.IntrospectionException;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -16,6 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JToolBar;
+
+import com.l2fprod.common.propertysheet.PropertySheetTable;
 
 public class GUI extends JFrame
 {
@@ -30,12 +33,16 @@ public class GUI extends JFrame
 		loader.parse( "docs/pieces.xml" );
 		loader.parse( "docs/saved.xml" );
 		
-		final Layout layout = new Layout( new Point( 50, 50 ) );
+		PropertySheetTable table = new PropertySheetTable();
+    	//table.setFont( new Font( "Tahoma", Font.PLAIN, 16 ) );
+    	
+		final Layout layout = new Layout( new Point( 50, 50 ), table.getSheetModel() );
 		loader.addLand( layout );
 		
 		JInternalFrame palette = createTrackPalette();
 		loader.addTabs( palette.getContentPane() );
 		layout.add( palette, JLayeredPane.PALETTE_LAYER );
+		layout.add( createPropertiesPane( table ), JLayeredPane.PALETTE_LAYER );
 		
 		JToolBar toolBar = createToolBar();
 		layout.add( toolBar, BorderLayout.NORTH );
@@ -75,13 +82,24 @@ public class GUI extends JFrame
 	{
     	JInternalFrame palette = new JInternalFrame();
     	palette.putClientProperty( "JInternalFrame.isPalette", Boolean.TRUE );
-    	palette.setSize( 218, 600 );
+    	palette.setSize( 218, 400 );
     	palette.setLocation( 804, 36 );
     	palette.setVisible( true );
 		return palette;
 	}
-		
-    protected static JFrame createSplashScreen()
+	
+    protected JInternalFrame createPropertiesPane( PropertySheetTable table ) throws IntrospectionException
+    {
+    	JInternalFrame properties = new JInternalFrame();
+    	properties.putClientProperty( "JInternalFrame.isPalette", Boolean.TRUE );
+    	properties.setSize( 218, 200 );
+    	properties.setLocation( 804, 436 );
+    	properties.setVisible( true );
+    	properties.getContentPane().add( table );
+		return properties;    	
+    }
+    
+	protected static JFrame createSplashScreen()
     {
     	JFrame splash = new JFrame();
     	splash.setSize( 300, 300 );
