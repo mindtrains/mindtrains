@@ -7,7 +7,7 @@ import javax.swing.Icon;
 
 public class If extends Piece
 {
-	public static class Limit
+	public static class Limit implements Cloneable
 	{
 		int maximum;
 
@@ -19,7 +19,19 @@ public class If extends Piece
 		public void setMaximum( int maximum )
 		{
 			this.maximum = maximum;
-		}	
+		}
+
+		public Object clone()
+		{
+			try
+			{
+				return super.clone();
+			}
+			catch ( CloneNotSupportedException e )
+			{
+				return null;
+			}
+		}
 	}
 	
 	int travelled;
@@ -57,5 +69,10 @@ public class If extends Piece
 	public Object getProperties()
 	{
 		return limit;
+	}
+
+	protected void cloneProperties( Piece piece )
+	{
+		limit = (Limit)( (If)piece ).limit.clone();
 	}
 }

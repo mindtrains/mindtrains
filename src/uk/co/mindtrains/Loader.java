@@ -112,6 +112,7 @@ public class Loader
     				image = parseImage( child );
     			else if ( child.getNodeName().equalsIgnoreCase( "connector" ) )
 					connectors.add( parseConnector( child ) );
+    			// TODO default properties
     			else
     				throw new Exception( "Unexpected <" + child.getNodeName() + "> element" );
     		}
@@ -271,7 +272,7 @@ public class Loader
 		protected Point point;
 	}
 	
-	private PiecePoint parsePieceRefPoint( Node node )
+	private PiecePoint parsePieceRefPoint( Node node ) throws Exception
 	{
 		PiecePoint piecePoint = new PiecePoint();
 		NamedNodeMap attributes = node.getAttributes();
@@ -280,6 +281,21 @@ public class Loader
 		// boolean fixed = Boolean.valueOf( attributes.getNamedItem( "fixed" ).getNodeValue() ).booleanValue();
 		piecePoint.point = new Point( x, y );
 		piecePoint.piece = parsePieceRef( node );
+
+		Node child = node.getFirstChild();
+		while ( child != null )
+    	{
+    		if ( child.getNodeType() == Node.ELEMENT_NODE )
+    		{
+    			if ( child.getNodeName().equalsIgnoreCase( "property" ) )
+    				System.out.println( "\t\t\t\tproperty" );
+    				//image = parseImage( child );
+    			else
+    				throw new Exception( "Unexpected <" + child.getNodeName() + "> element" );
+    		}
+    		child = child.getNextSibling();
+    	}
+		
 		return piecePoint;
 	}
 

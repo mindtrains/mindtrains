@@ -32,7 +32,7 @@ public class Piece implements Cloneable
 	}
 
 	/**
-	 * Create a deeper copy as we don't want to share connectors or location.
+	 * Create a deeper copy as we don't want to share connectors, location or properties.
 	 */
 	public Object clone()
 	{
@@ -44,6 +44,7 @@ public class Piece implements Cloneable
 				piece.connectors[ i ] = (Connector)connectors[ i ].clone();
 			if ( location != null )
 				piece.location = (Point)location.clone();
+			piece.cloneProperties( this );
 			return piece;
 		}
 		catch( CloneNotSupportedException e )
@@ -51,7 +52,7 @@ public class Piece implements Cloneable
 			return null;
 		}
 	}
-	
+
 	public Point snap( Piece piece )
 	{
 		Point snap = null;
@@ -166,5 +167,13 @@ public class Piece implements Cloneable
 	public Object getProperties()
 	{
 		return null;
+	}
+	
+	/**
+	 * Subclasses should override this to clone properties when pieces are created.
+	 * Alternately this can be done by overriding the clone method directly.
+	 */	
+	protected void cloneProperties( Piece piece )
+	{
 	}
 }

@@ -30,9 +30,19 @@ public class Saver
 			if ( component instanceof Piece.Label && component != layout.getMain() )
 			{
 				Piece.Label piece = (Piece.Label)component;
-				writer.println( "    <piece ref=\"" + piece.getPiece().getId() +
+				writer.print( "    <piece ref=\"" + piece.getPiece().getId() +
 				                "\" x=\"" + piece.getLocation().x +
-				                "\" y=\"" + piece.getLocation().y + "\" />");
+				                "\" y=\"" + piece.getLocation().y + "\"" );
+				Object properties = piece.getPiece().getProperties();
+				
+				if ( properties == null )
+					writer.println( " />" );
+				else
+				{
+					writer.println( ">" );
+					writer.println( "      <property name=\"\" value=\"\" />" );
+					writer.println( "    </piece>" );
+				}
 			}
 		}
 		writer.println( "  </land>" );
