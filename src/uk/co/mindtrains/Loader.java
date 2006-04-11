@@ -10,8 +10,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -272,7 +275,7 @@ public class Loader
 		protected Point point;
 	}
 	
-	private PiecePoint parsePieceRefPoint( Node node ) throws Exception
+	protected PiecePoint parsePieceRefPoint( Node node ) throws Exception
 	{
 		PiecePoint piecePoint = new PiecePoint();
 		NamedNodeMap attributes = node.getAttributes();
@@ -280,7 +283,7 @@ public class Loader
 		int y = Integer.parseInt( attributes.getNamedItem( "y" ).getNodeValue() );
 		// boolean fixed = Boolean.valueOf( attributes.getNamedItem( "fixed" ).getNodeValue() ).booleanValue();
 		piecePoint.point = new Point( x, y );
-		piecePoint.piece = parsePieceRef( node );
+		piecePoint.piece = (Piece)parsePieceRef( node ).clone();;
 
 		Node child = node.getFirstChild();
 		while ( child != null )
@@ -288,9 +291,7 @@ public class Loader
     		if ( child.getNodeType() == Node.ELEMENT_NODE )
     		{
     			if ( child.getNodeName().equalsIgnoreCase( "property" ) )
-    				System.out.println( "\t\t\t\tproperty" );
-    				// TODO deal with cloning too
-    				//image = parseImage( child );
+    				parseProperties( child, piecePoint.piece );
     			else
     				throw new Exception( "Unexpected <" + child.getNodeName() + "> element" );
     		}
@@ -298,6 +299,41 @@ public class Loader
     	}
 		
 		return piecePoint;
+	}
+
+	protected void parseProperties( Node node, Piece piece )
+	{
+		System.out.println( "\t\t\t\tproperty" );
+		NamedNodeMap attributes = node.getAttributes();
+		String name = attributes.getNamedItem( "name" ).getNodeValue();
+		Object properties = piece.getProperties();
+		if ( properties != null )
+		{
+			try
+			{
+				PropertyDescriptor[] descriptors = Introspector.getBeanInfo( properties.getClass(), Object.class ).getPropertyDescriptors();
+				for ( int j = 0; j < descriptors.length; j++ )
+				{
+					if ( name.equalsIgnoreCase( descriptors[ j ].getName() ) )
+					{
+						Method method = descriptors[ j ].getWriteMethod();
+						Class clazz = method.getParameterTypes()[ 0 ];
+						if ( clazz == Integer.TYPE )
+						{
+							Integer value = Integer.decode( attributes.getNamedItem( "value" ).getNodeValue() );
+							System.out.println( name + "=" + value );
+							method.invoke( properties, new Object[] { value } );
+						}
+					}
+				}
+			}
+			catch ( Exception e )
+			{
+				e.printStackTrace( System.err );
+			}
+		}
+		else
+			System.err.println( "Property element, but piece doesn't have any" );
 	}
 
 	public void addTabs( Container contentPane )
@@ -310,8 +346,7 @@ public class Loader
 		for ( int i = 0; i < land.size(); i++ )
 		{
 			PiecePoint piecePoint = (PiecePoint)land.get( i );
-			Piece piece = (Piece)piecePoint.piece.clone();
-			Piece.Label label = layout.add( piece, piecePoint.point, false );
+			Piece.Label label = layout.add( piecePoint.piece, piecePoint.point, false );
 			if ( i == 0 )
 				layout.setMain( label );
 		}		
