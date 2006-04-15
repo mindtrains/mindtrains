@@ -318,12 +318,15 @@ public class Loader
 					{
 						Method method = descriptors[ j ].getWriteMethod();
 						Class clazz = method.getParameterTypes()[ 0 ];
+						Object value = null;
+
 						if ( clazz == Integer.TYPE )
-						{
-							Integer value = Integer.decode( attributes.getNamedItem( "value" ).getNodeValue() );
-							System.out.println( name + "=" + value );
-							method.invoke( properties, new Object[] { value } );
-						}
+							value = Integer.decode( attributes.getNamedItem( "value" ).getNodeValue() );
+						else if ( clazz == String.class )
+							value = attributes.getNamedItem( "value" ).getNodeValue();
+
+						System.out.println( name + "=" + value + " (type=" + clazz.getName() + ")" );
+						method.invoke( properties, new Object[] { value } );
 					}
 				}
 			}

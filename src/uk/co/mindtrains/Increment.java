@@ -5,20 +5,31 @@ package uk.co.mindtrains;
 
 import javax.swing.Icon;
 
+import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
+
 public class Increment extends Piece
 {
 	public static class By implements Cloneable
 	{
-		int value;
+		public static class Editor extends ComboBoxPropertyEditor
+		{
+			public Editor()
+			{
+				super();	    
+			    setAvailableValues( new String[] { "++", "--" } );
+			}
+		}
 
-		public int getValue()
+		String value;
+
+		public String getValue()
 		{
 			return value;
 		}
 
-		public void setValue( int maximum )
+		public void setValue( String operation )
 		{
-			this.value = maximum;
+			this.value = operation;
 		}
 
 		public Object clone()
@@ -33,6 +44,7 @@ public class Increment extends Piece
 			}
 		}
 	}
+	
 	
 	By by = new By();
 	

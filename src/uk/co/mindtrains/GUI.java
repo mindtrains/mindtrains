@@ -1,8 +1,5 @@
 /*
- * Created on Jan 8, 2006
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * Copyright (c) 2006 Andy Wood
  */
 package uk.co.mindtrains;
 
@@ -18,6 +15,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JToolBar;
 
+import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
 import com.l2fprod.common.propertysheet.PropertySheetTable;
 
 public class GUI extends JFrame
@@ -34,9 +32,11 @@ public class GUI extends JFrame
 		loader.parse( "docs/saved.xml" );
 		
 		PropertySheetTable table = new PropertySheetTable();
+		PropertyEditorRegistry registry = new PropertyEditorRegistry();
+		table.setEditorFactory( registry );
     	//table.setFont( new Font( "Tahoma", Font.PLAIN, 16 ) );
     	
-		final Layout layout = new Layout( new Point( 50, 50 ), table.getSheetModel() );
+		final Layout layout = new Layout( new Point( 50, 50 ), table.getSheetModel(), registry );
 		loader.addLand( layout );
 		
 		JInternalFrame palette = createTrackPalette();

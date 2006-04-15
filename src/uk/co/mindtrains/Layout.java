@@ -28,6 +28,7 @@ import javax.swing.JLayeredPane;
 
 import com.l2fprod.common.propertysheet.DefaultProperty;
 import com.l2fprod.common.propertysheet.Property;
+import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
 import com.l2fprod.common.propertysheet.PropertySheetTableModel;
 
 import uk.co.mindtrains.Piece.Label;
@@ -45,7 +46,7 @@ public class Layout extends JDesktopPane
 	private Rectangle draggingRect = new Rectangle();
 	private PropertySheetTableModel model;
 	
-	public Layout( Point start, PropertySheetTableModel m )
+	public Layout( Point start, PropertySheetTableModel m, final PropertyEditorRegistry registry )
 	{
 		model = m;
 		
@@ -62,7 +63,7 @@ public class Layout extends JDesktopPane
 					dragOffset = new Point( e.getX() - piece.getX(), e.getY() - piece.getY() );
 					remove( piece );
 					add( piece, 0 );
-					model.setProperties( createProperties( dragging.getPiece().getProperties() ) );
+					model.setProperties( createProperties( dragging.getPiece().getProperties(), registry ) );
 					repaint();
 				}
 				else
@@ -210,7 +211,7 @@ public class Layout extends JDesktopPane
 		}
 	}
 
-    private Property[] createProperties( final Object object )
+    private Property[] createProperties( final Object object, PropertyEditorRegistry registry )
 	{
     	if ( object != null )
     	{
@@ -231,10 +232,15 @@ public class Layout extends JDesktopPane
 						{
 							property.writeToObject( object );
 						}
-		    			
 		    		} );
 		    		properties[ i ] = property;
 		    	}
+		    	
+		    	if ( object instanceof Increment.By )
+		    	{
+		    		registry.registerEditor( properties[ 0 ], Increment.By.Editor.class );
+		    	}
+		    	
 				return properties;
 			}
 			catch ( IntrospectionException e )
