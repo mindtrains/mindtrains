@@ -61,9 +61,7 @@ public class Layout extends JDesktopPane
 				Component piece = findComponentAt( e.getPoint() );
 				if ( piece != null && piece instanceof Piece.Label )
 				{
-					if ( dragging != null )
-						dragging.setBorder( null );
-					dragging = (Piece.Label)piece;
+					setDragging( (Piece.Label)piece );
 					dragOffset = new Point( e.getX() - piece.getX(), e.getY() - piece.getY() );
 					remove( piece );
 					dragging.setBorder( LineBorder.createGrayLineBorder() );
@@ -160,9 +158,14 @@ public class Layout extends JDesktopPane
 		IconTransferHandler.setLayout( this );
 	}
 	
-	public void setDragging( Piece.Label dragging )
+	public void setDragging( Piece.Label d )
 	{
-		this.dragging = dragging;
+		if ( dragging != null )
+		{
+			dragging.setBorder( null );
+			model.setProperties( new Property[ 0 ] );
+		}
+		dragging = d;
 	}
 
 	public Piece.Label add( Piece piece, Point location, boolean snap )
