@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* Copyright (c) 2006 Andy Wood
+-->
+<project name="MindTrains" default="package" basedir=".">
+
+    <target name ="package" description="Create an obfuscated, executable jar.">
+
+        <jar jarfile="MindTrains.jar">
+			<zipfileset dir="classes" includes="**/*.class" />
+			<zipfileset src="l2fprod-common-6-2/lib/l2fprod-common-sheet.jar" />
+        	<manifest>
+				<attribute name="Built-By" value="Andy Wood" />
+        	    <attribute name="Main-Class" value="uk.co.mindtrains.GUI" />
+        	</manifest>
+        </jar>
+
+    </target>
+
+</project>
