@@ -34,7 +34,6 @@ public class If extends Piece
 		}
 	}
 	
-	int travelled;
 	Limit limit = new Limit();
 	
 	/**
@@ -47,16 +46,14 @@ public class If extends Piece
 
 	public void reset()
 	{
-		travelled = 0;
 	}
 	
 	public Connector travel( Train train, Connector entry )
 	{
 		if ( entry == connectors[ 0 ] )
 		{
-			if ( travelled < limit.getMaximum() )
+			if ( ( (Integer)train.getLoad() ).intValue() < limit.getMaximum() )
 			{
-				travelled++;
 				return connectors[ 1 ];
 			}
 			else

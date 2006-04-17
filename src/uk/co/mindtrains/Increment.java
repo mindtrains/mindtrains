@@ -20,7 +20,7 @@ public class Increment extends Piece
 			}
 		}
 
-		String value;
+		String value = "++";
 
 		public String getValue()
 		{
@@ -30,6 +30,11 @@ public class Increment extends Piece
 		public void setValue( String operation )
 		{
 			this.value = operation;
+		}
+		
+		public boolean increment()
+		{
+			return value.equals( "++" );
 		}
 
 		public Object clone()
@@ -55,7 +60,8 @@ public class Increment extends Piece
 	
 	public Connector travel( Train train, Connector entry )
 	{
-		// TODO increment train load
+		int value = ( (Integer)train.getLoad() ).intValue();
+		train.setLoad( new Integer( by.increment() ? ++value : --value ) );
 		return super.travel( train, entry );
 	}
 

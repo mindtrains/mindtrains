@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 public class Train extends JLabel
 {
 	private static final long serialVersionUID = 1L;
+	private Object load;
 
 	public Train()
 	{
@@ -24,4 +25,14 @@ public class Train extends JLabel
 		super.setLocation( location );
 		getParent().repaint();
 	}	
+	
+	public Object getLoad()
+	{
+		return load;
+	}
+
+	public void setLoad( Object load )
+	{
+		this.load = load;
+	}
 }
