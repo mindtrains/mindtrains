@@ -6,11 +6,10 @@
 
     <target name ="package" description="Create an obfuscated, executable jar.">
 
-        <jar jarfile="MindTrains.jar">
-			<zipfileset dir="classes" includes="**/*.class" />
-			<zipfileset src="l2fprod-common-6-2/lib/l2fprod-common-sheet.jar" />
+        <jar jarfile="MindTrains.jar" basedir="classes" includes="**/*.class">
         	<manifest>
 				<attribute name="Built-By" value="Andy Wood" />
+        		<attribute name="Class-Path" value="l2fprod-common-6.2/lib/l2fprod-common-sheet.jar" />
         	    <attribute name="Main-Class" value="uk.co.mindtrains.GUI" />
         	</manifest>
         </jar>
