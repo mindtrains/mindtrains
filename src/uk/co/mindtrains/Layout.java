@@ -24,14 +24,16 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 
 import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.border.LineBorder;
+
+import uk.co.mindtrains.Piece.Label;
 
 import com.l2fprod.common.propertysheet.DefaultProperty;
 import com.l2fprod.common.propertysheet.Property;
 import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
 import com.l2fprod.common.propertysheet.PropertySheetTableModel;
-
-import uk.co.mindtrains.Piece.Label;
 
 /**
  * Layout class manages the list of track pieces as the user is
@@ -59,9 +61,12 @@ public class Layout extends JDesktopPane
 				Component piece = findComponentAt( e.getPoint() );
 				if ( piece != null && piece instanceof Piece.Label )
 				{
+					if ( dragging != null )
+						dragging.setBorder( null );
 					dragging = (Piece.Label)piece;
 					dragOffset = new Point( e.getX() - piece.getX(), e.getY() - piece.getY() );
 					remove( piece );
+					dragging.setBorder( LineBorder.createGrayLineBorder() );
 					add( piece, 0 );
 					model.setProperties( createProperties( dragging.getPiece().getProperties(), registry ) );
 					repaint();
@@ -170,9 +175,9 @@ public class Layout extends JDesktopPane
 		return label;
 	}
 
-	public void printProgram()
+	public void run( JInternalFrame palette, PropertySheetTableModel model  )
 	{
-		new Run( this );
+		new Run( this, palette, model );
 	}
 
 	public void setMain( Label main )
@@ -211,7 +216,7 @@ public class Layout extends JDesktopPane
 		}
 	}
 
-    private Property[] createProperties( final Object object, PropertyEditorRegistry registry )
+    public static Property[] createProperties( final Object object, PropertyEditorRegistry registry )
 	{
     	if ( object != null )
     	{

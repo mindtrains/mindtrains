@@ -3,13 +3,21 @@
  */
 package uk.co.mindtrains;
 
+import javax.swing.JInternalFrame;
+
+import com.l2fprod.common.propertysheet.PropertySheetTableModel;
+
 public class Run extends Thread
 {
 	private Layout layout;
+	private JInternalFrame palette;
+	private PropertySheetTableModel model;
 	
-	public Run( Layout layout )
+	public Run( Layout layout, JInternalFrame palette, PropertySheetTableModel model )
 	{
 		this.layout = layout;
+		this.palette = palette;
+		this.model = model;
 		start();
 	}
 
@@ -19,6 +27,7 @@ public class Run extends Thread
 			if ( layout.getComponent( i ) instanceof Piece.Label )
 				( (Piece.Label)layout.getComponent( i ) ).getPiece().reset();
 
+		palette.setVisible( true );
 		Train train = new Train();
 		layout.add( train, 0 );
 		
@@ -27,6 +36,7 @@ public class Run extends Thread
 		do
 		{
 			Connector exit = now.getPiece().travel( train, entry );
+			model.setProperties( Layout.createProperties( train.getLoad(), null ) );
 			train.setLocation( exit.midlocation() );
 			for ( int i = 0; i < layout.getComponentCount(); i++ )
 			{
@@ -50,5 +60,6 @@ public class Run extends Thread
 
 		layout.remove( train );
 		layout.repaint();
+		palette.setVisible( false );
 	}
 }

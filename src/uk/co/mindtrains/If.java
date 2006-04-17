@@ -52,7 +52,7 @@ public class If extends Piece
 	{
 		if ( entry == connectors[ 0 ] )
 		{
-			if ( ( (Integer)train.getLoad() ).intValue() < limit.getMaximum() )
+			if ( ( (Carriages)train.getLoad() ).getCarriageA() < limit.getMaximum() )
 			{
 				return connectors[ 1 ];
 			}

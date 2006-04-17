@@ -35,7 +35,9 @@ public class GUI extends JFrame
 		PropertyEditorRegistry registry = new PropertyEditorRegistry();
 		table.setEditorFactory( registry );
     	//table.setFont( new Font( "Tahoma", Font.PLAIN, 16 ) );
-    	
+
+		final PropertySheetTable carriages = new PropertySheetTable();
+
 		final Layout layout = new Layout( new Point( 50, 50 ), table.getSheetModel(), registry );
 		loader.addLand( layout );
 		
@@ -43,6 +45,8 @@ public class GUI extends JFrame
 		loader.addTabs( palette.getContentPane() );
 		layout.add( palette, JLayeredPane.PALETTE_LAYER );
 		layout.add( createPropertiesPane( table ), JLayeredPane.PALETTE_LAYER );
+		final JInternalFrame carriagesPalette = createCarriagesPane( carriages );
+		layout.add( carriagesPalette, JLayeredPane.PALETTE_LAYER );
 		
 		JToolBar toolBar = createToolBar();
 		layout.add( toolBar, BorderLayout.NORTH );
@@ -61,7 +65,7 @@ public class GUI extends JFrame
 			private static final long serialVersionUID = 1L;
 			public void actionPerformed(ActionEvent arg0)
 			{
-				( (Layout)layout ).printProgram();
+				( (Layout)layout ).run( carriagesPalette, carriages.getSheetModel() );
 			}
 		} );
 
@@ -90,16 +94,27 @@ public class GUI extends JFrame
 	
     protected JInternalFrame createPropertiesPane( PropertySheetTable table ) throws IntrospectionException
     {
-    	JInternalFrame properties = new JInternalFrame();
+    	JInternalFrame properties = new JInternalFrame( "Track Properties" );
     	properties.putClientProperty( "JInternalFrame.isPalette", Boolean.TRUE );
-    	properties.setSize( 218, 200 );
+    	properties.setSize( 218, 100 );
     	properties.setLocation( 804, 436 );
     	properties.setVisible( true );
     	properties.getContentPane().add( table );
 		return properties;    	
     }
     
-	protected static JFrame createSplashScreen()
+    protected JInternalFrame createCarriagesPane( PropertySheetTable table ) throws IntrospectionException
+    {
+    	JInternalFrame carriages = new JInternalFrame( "Train Properties" );
+    	carriages.putClientProperty( "JInternalFrame.isPalette", Boolean.TRUE );
+    	carriages.setSize( 218, 100 );
+    	carriages.setLocation( 804, 536 );
+    	carriages.setVisible( false );
+    	carriages.getContentPane().add( table );
+		return carriages;    	
+    }
+
+    protected static JFrame createSplashScreen()
     {
     	JFrame splash = new JFrame();
     	splash.setSize( 300, 300 );

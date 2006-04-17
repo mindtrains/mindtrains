@@ -43,7 +43,9 @@ public class Main extends Piece
 	
 	public Connector travel( Train train, Connector entry )
 	{
-		train.setLoad( new Integer( args.getArgument1() ) );
+		Carriages carriages = new Carriages();
+		carriages.setCarriageA( args.getArgument1() );
+		train.setLoad( carriages );
 		return connectors[ 0 ];
 	}
 	
