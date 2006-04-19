@@ -32,7 +32,7 @@ public class Connector implements Cloneable
 	public Connector( Point offset, short orientation ) // degrees
 	{
 		this.offset = offset;
-		this.orientation = (double)orientation / 180.0 * Math.PI;
+		this.orientation = Math.toRadians( orientation );
 	}
 
 	public void setLocation( Point location )
@@ -99,6 +99,11 @@ public class Connector implements Cloneable
 		{
 			return null;
 		}
+	}
+
+	double getOrientation() // radians
+	{
+		return orientation;
 	}
 
 }

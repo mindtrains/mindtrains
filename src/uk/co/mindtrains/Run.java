@@ -37,6 +37,7 @@ public class Run extends Thread
 		{
 			Connector exit = now.getPiece().travel( train, entry );
 			model.setProperties( Layout.createProperties( train.getLoad(), null ) );
+			train.setOrientation( exit.getOrientation() );
 			train.setLocation( exit.midlocation() );
 			for ( int i = 0; i < layout.getComponentCount(); i++ )
 			{
