@@ -47,7 +47,7 @@ public class Saver
 						PropertyDescriptor[] descriptors = Introspector.getBeanInfo( properties.getClass(), Object.class ).getPropertyDescriptors();
 						for ( int j = 0; j < descriptors.length; j++ )
 							writer.println( "      <property name=\"" + descriptors[ j ].getName() + "\" value=\"" +
-							                descriptors[ j ].getReadMethod().invoke( properties, null ) + "\" />" );
+							                escape( descriptors[ j ].getReadMethod().invoke( properties, null ) ) + "\" />" );
 					}
 					catch ( Exception e )
 					{
@@ -60,5 +60,16 @@ public class Saver
 		writer.println( "  </land>" );
 		writer.println( "</mindtrains>" );
 		writer.close();
+	}
+
+	private String escape( Object object )
+	{
+		String string = object.toString();
+		if ( string.equals( "<" ) )
+			return "&lt;";
+		else if ( string.equals( ">" ) )
+			return "&gt;";
+		else
+			return string;
 	}
 }

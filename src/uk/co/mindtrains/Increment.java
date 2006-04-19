@@ -20,21 +20,21 @@ public class Increment extends Piece
 			}
 		}
 
-		String value = "++";
+		String operator = "++";
 
-		public String getValue()
+		public String getOperator()
 		{
-			return value;
+			return operator;
 		}
 
-		public void setValue( String operation )
+		public void setOperator( String operation )
 		{
-			this.value = operation;
+			this.operator = operation;
 		}
 		
 		public boolean increment()
 		{
-			return value.equals( "++" );
+			return operator.equals( "++" );
 		}
 
 		public Object clone()

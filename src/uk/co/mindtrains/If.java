@@ -5,22 +5,54 @@ package uk.co.mindtrains;
 
 import javax.swing.Icon;
 
+import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
+
 public class If extends Piece
 {
 	public static class Limit implements Cloneable
 	{
-		int maximum;
-
-		public int getMaximum()
+		public static class Editor extends ComboBoxPropertyEditor
 		{
-			return maximum;
+			public Editor()
+			{
+				super();	    
+			    setAvailableValues( new String[] { ">", "==", "<" } );
+			}
 		}
 
-		public void setMaximum( int maximum )
+		String comparison = "<";
+		int value;
+
+		public String getComparison()
 		{
-			this.maximum = maximum;
+			return comparison;
 		}
 
+		public void setComparison( String test )
+		{
+			this.comparison = test;
+		}
+
+		public int getValue()
+		{
+			return value;
+		}
+
+		public void setValue( int maximum )
+		{
+			this.value = maximum;
+		}
+
+		public boolean compare( int v )
+		{
+			if ( comparison.equals( ">" ) )
+				return v > value;
+			else if (comparison.equals( "<" ) )
+				return v < value;
+			else
+				return v == value;
+		}
+		
 		public Object clone()
 		{
 			try
@@ -37,7 +69,7 @@ public class If extends Piece
 	Limit limit = new Limit();
 	
 	/**
-	 * Really important that first connector is in with 2 & 3 as out
+	 * Really important that first connector [0] is in with [1] & [2] as out
 	 */
 	public If( String id, Icon icon, Connector[] connectors )
 	{
@@ -52,7 +84,7 @@ public class If extends Piece
 	{
 		if ( entry == connectors[ 0 ] )
 		{
-			if ( ( (Carriages)train.getLoad() ).getCarriageA() < limit.getMaximum() )
+			if ( limit.compare( ( (Carriages)train.getLoad() ).getCarriageA() ) )
 			{
 				return connectors[ 1 ];
 			}

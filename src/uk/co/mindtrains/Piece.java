@@ -131,7 +131,6 @@ public class Piece implements Cloneable
 	
 	public Connector travel( Train train, Connector entry )
 	{
-		System.err.println( "connectors: " + connectors.length + " " + entry );
 		if ( connectors.length == 1 )
 			return connectors[ 0 ];
 		else
