@@ -4,6 +4,8 @@
 -->
 <project name="MindTrains" default="package" basedir=".">
 
+	<property name="mindtrains.version" value="0-1" />
+	
     <target name ="package" description="Create an obfuscated, executable jar.">
 
         <jar jarfile="MindTrains.jar" basedir="classes" includes="**/*.class">
@@ -14,6 +16,15 @@
         	</manifest>
         </jar>
 
+    	<zip destfile="MindTrains-${mindtrains.version}.zip">
+    		<fileset dir=".">
+    			<include name="MindTrains.jar" />
+    			<include name="docs/*.png" />
+    			<include name="docs/*.xml" />
+    			<include name="l2fprod-common-6.2/lib/l2fprod-common-sheet.jar" />
+    		</fileset>
+    	</zip>
+    		
     </target>
 
 </project>
