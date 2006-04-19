@@ -18,6 +18,7 @@
 
     	<zip destfile="MindTrains-${mindtrains.version}.zip">
     		<fileset dir=".">
+    			<include name="readme.txt" />
     			<include name="MindTrains.jar" />
     			<include name="docs/*.png" />
     			<include name="docs/*.xml" />
