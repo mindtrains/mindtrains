@@ -70,7 +70,7 @@ public class Layout extends JDesktopPane
 					repaint();
 				}
 				else
-					dragging = null;
+					setDragging( null );
 			}
 		} );
 
