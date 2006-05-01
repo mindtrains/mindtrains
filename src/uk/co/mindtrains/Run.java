@@ -31,7 +31,6 @@ public class Run extends Thread
 
 		console.clear();
 		console.setVisible( true );
-		console.requestFocusInWindow();
 		palette.setVisible( true );
 		Train train = new Train();
 		layout.add( train, 0 );

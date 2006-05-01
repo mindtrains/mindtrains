@@ -5,7 +5,7 @@ package uk.co.mindtrains;
 
 import javax.swing.Icon;
 
-public class Output extends Piece
+public class Input extends Piece
 {
 	public static class Message implements Cloneable
 	{
@@ -36,14 +36,16 @@ public class Output extends Piece
 	
 	private Message message = new Message();
 	
-	public Output( String id, Icon icon, Connector[] connectors )
+	public Input( String id, Icon icon, Connector[] connectors )
 	{
 		super( id, icon, connectors );
 	}
 	
 	public Connector travel( Train train, Connector entry, Console console )
 	{
-		console.println( message.getMessage() );
+		Carriages carriages = (Carriages)train.getLoad();
+		String input = console.readln();
+		carriages.setCarriageA( Integer.parseInt( input ) );
 		return super.travel( train, entry, console );
 	}
 
@@ -54,6 +56,6 @@ public class Output extends Piece
 
 	protected void cloneProperties( Piece piece )
 	{
-		message = (Message)( (Output)piece ).message.clone();
+		message = (Message)( (Input)piece ).message.clone();
 	}
 }
