@@ -12,12 +12,14 @@ public class Run extends Thread
 	private Layout layout;
 	private JInternalFrame palette;
 	private PropertySheetTableModel model;
+	private Console console;
 	
-	public Run( Layout layout, JInternalFrame palette, PropertySheetTableModel model )
+	public Run( Layout layout, JInternalFrame palette, PropertySheetTableModel model, Console console )
 	{
 		this.layout = layout;
 		this.palette = palette;
 		this.model = model;
+		this.console = console;
 		start();
 	}
 
@@ -27,6 +29,9 @@ public class Run extends Thread
 			if ( layout.getComponent( i ) instanceof Piece.Label )
 				( (Piece.Label)layout.getComponent( i ) ).getPiece().reset();
 
+		console.clear();
+		console.setVisible( true );
+		console.requestFocusInWindow();
 		palette.setVisible( true );
 		Train train = new Train();
 		layout.add( train, 0 );
@@ -35,7 +40,7 @@ public class Run extends Thread
 		Connector entry = null;
 		do
 		{
-			Connector exit = now.getPiece().travel( train, entry );
+			Connector exit = now.getPiece().travel( train, entry, console );
 			model.setProperties( Layout.createProperties( train.getLoad(), null ) );
 			train.setOrientation( exit.getOrientation() );
 			train.setLocation( exit.midlocation() );
@@ -62,5 +67,6 @@ public class Run extends Thread
 		layout.remove( train );
 		layout.repaint();
 		palette.setVisible( false );
+		console.setVisible( false );
 	}
 }

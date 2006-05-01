@@ -178,9 +178,9 @@ public class Layout extends JDesktopPane
 		return label;
 	}
 
-	public void run( JInternalFrame palette, PropertySheetTableModel model  )
+	public void run( JInternalFrame palette, PropertySheetTableModel model, Console console  )
 	{
-		new Run( this, palette, model );
+		new Run( this, palette, model, console );
 	}
 
 	public void setMain( Label main )

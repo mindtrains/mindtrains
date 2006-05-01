@@ -43,11 +43,11 @@ public class Random extends Piece
 		super( id, icon, connectors );
 	}
 	
-	public Connector travel( Train train, Connector entry )
+	public Connector travel( Train train, Connector entry, Console console )
 	{
 		Carriages carriages = (Carriages)train.getLoad();
 		carriages.setCarriageB( random.nextInt( upto.getMaximum() ) );
-		return super.travel( train, entry );
+		return super.travel( train, entry, console );
 	}
 
 	public Object getProperties()

@@ -4,6 +4,7 @@
 package uk.co.mindtrains;
 
 import javax.swing.Icon;
+import javax.swing.JComboBox;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
@@ -17,6 +18,7 @@ public class If extends Piece
 			{
 				super();	    
 			    setAvailableValues( new String[] { ">", "==", "<" } );
+			    ( (JComboBox)editor ).setEditable( true );
 			}
 		}
 
@@ -80,7 +82,7 @@ public class If extends Piece
 	{
 	}
 	
-	public Connector travel( Train train, Connector entry )
+	public Connector travel( Train train, Connector entry, Console console )
 	{
 		if ( entry == connectors[ 0 ] )
 		{

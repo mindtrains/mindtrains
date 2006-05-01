@@ -41,7 +41,7 @@ public class Main extends Piece
 		super( id, icon, connectors );
 	}
 	
-	public Connector travel( Train train, Connector entry )
+	public Connector travel( Train train, Connector entry, Console console )
 	{
 		Carriages carriages = new Carriages();
 		carriages.setCarriageA( args.getArgument1() );

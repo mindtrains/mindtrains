@@ -129,7 +129,7 @@ public class Piece implements Cloneable
 	{
 	}
 	
-	public Connector travel( Train train, Connector entry )
+	public Connector travel( Train train, Connector entry, Console console )
 	{
 		if ( connectors.length == 1 )
 			return connectors[ 0 ];

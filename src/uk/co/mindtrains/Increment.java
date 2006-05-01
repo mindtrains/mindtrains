@@ -58,11 +58,11 @@ public class Increment extends Piece
 		super( id, icon, connectors );
 	}
 	
-	public Connector travel( Train train, Connector entry )
+	public Connector travel( Train train, Connector entry, Console console )
 	{
 		Carriages carriages = (Carriages)train.getLoad();
 		carriages.setCarriageA( by.increment() ? carriages.getCarriageA() + 1 : carriages.getCarriageA() - 1 );
-		return super.travel( train, entry );
+		return super.travel( train, entry, console );
 	}
 
 	public Object getProperties()

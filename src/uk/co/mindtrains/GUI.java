@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.beans.IntrospectionException;
+import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -48,6 +49,9 @@ public class GUI extends JFrame
 		final JInternalFrame carriagesPalette = createCarriagesPane( carriages );
 		layout.add( carriagesPalette, JLayeredPane.PALETTE_LAYER );
 		
+		final Console console = createConsole();
+		layout.add( console );
+		
 		JToolBar toolBar = createToolBar();
 		layout.add( toolBar, BorderLayout.NORTH );
 		
@@ -65,7 +69,7 @@ public class GUI extends JFrame
 			private static final long serialVersionUID = 1L;
 			public void actionPerformed(ActionEvent arg0)
 			{
-				( (Layout)layout ).run( carriagesPalette, carriages.getSheetModel() );
+				( (Layout)layout ).run( carriagesPalette, carriages.getSheetModel(), console );
 			}
 		} );
 
@@ -112,6 +116,16 @@ public class GUI extends JFrame
     	carriages.setVisible( false );
     	carriages.getContentPane().add( table );
 		return carriages;    	
+    }
+
+    protected Console createConsole() throws IOException
+    {
+    	Console console = new Console( "Console" );
+    	console.putClientProperty( "JInternalFrame.isPalette", Boolean.TRUE );
+    	console.setSize( 418, 200 );
+    	console.setLocation( 380, 436 );
+    	console.setVisible( false );
+    	return console;
     }
 
     protected static JFrame createSplashScreen()
