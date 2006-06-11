@@ -29,9 +29,9 @@ public class Saver
 		{
 			Component component = layout.getComponent( i );
 			
-			if ( component instanceof Piece.Label && component != layout.getMain() )
+			if ( component instanceof Piece.Representation && component != layout.getMain() )
 			{
-				Piece.Label piece = (Piece.Label)component;
+				Piece.Representation piece = (Piece.Representation)component;
 				writer.print( "    <piece ref=\"" + piece.getPiece().getId() +
 				                "\" x=\"" + piece.getLocation().x +
 				                "\" y=\"" + piece.getLocation().y + "\"" );

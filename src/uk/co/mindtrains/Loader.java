@@ -222,7 +222,7 @@ public class Loader
     		{
     			if ( child.getNodeName().equalsIgnoreCase( "piece" ) )
     			{
-    				Piece.Label label = parsePieceRef( child ).new Label();
+    				Piece.Representation label = parsePieceRef( child ).new Representation();
     				label.setTransferHandler( new IconTransferHandler( label.getIcon() ) );
     				MouseListener ml = new MouseAdapter() {
     				    public void mousePressed(MouseEvent e) {
@@ -349,7 +349,7 @@ public class Loader
 		for ( int i = 0; i < land.size(); i++ )
 		{
 			PiecePoint piecePoint = (PiecePoint)land.get( i );
-			Piece.Label label = layout.add( piecePoint.piece, piecePoint.point, false );
+			Piece.Representation label = layout.add( piecePoint.piece, piecePoint.point, false );
 			if ( i == 0 )
 				layout.setMain( label );
 		}		

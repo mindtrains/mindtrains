@@ -28,7 +28,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.border.LineBorder;
 
-import uk.co.mindtrains.Piece.Label;
+import uk.co.mindtrains.Piece.Representation;
 
 import com.l2fprod.common.propertysheet.DefaultProperty;
 import com.l2fprod.common.propertysheet.Property;
@@ -42,8 +42,8 @@ import com.l2fprod.common.propertysheet.PropertySheetTableModel;
 public class Layout extends JDesktopPane
 {
 	private static final long serialVersionUID = 1L;
-	private Piece.Label dragging;
-	private Piece.Label main;
+	private Piece.Representation dragging;
+	private Piece.Representation main;
 	private Point dragOffset;
 	private Rectangle draggingRect = new Rectangle();
 	private PropertySheetTableModel model;
@@ -59,9 +59,9 @@ public class Layout extends JDesktopPane
 			public void mousePressed( MouseEvent e )
 			{
 				Component piece = findComponentAt( e.getPoint() );
-				if ( piece != null && piece instanceof Piece.Label )
+				if ( piece != null && piece instanceof Piece.Representation )
 				{
-					setDragging( (Piece.Label)piece );
+					setDragging( (Piece.Representation)piece );
 					dragOffset = new Point( e.getX() - piece.getX(), e.getY() - piece.getY() );
 					remove( piece );
 					dragging.setBorder( LineBorder.createGrayLineBorder() );
@@ -158,7 +158,7 @@ public class Layout extends JDesktopPane
 		IconTransferHandler.setLayout( this );
 	}
 	
-	public void setDragging( Piece.Label d )
+	public void setDragging( Piece.Representation d )
 	{
 		if ( dragging != null )
 		{
@@ -168,9 +168,9 @@ public class Layout extends JDesktopPane
 		dragging = d;
 	}
 
-	public Piece.Label add( Piece piece, Point location, boolean snap )
+	public Piece.Representation add( Piece piece, Point location, boolean snap )
 	{
-		Piece.Label label = piece.new Label();
+		Piece.Representation label = piece.new Representation();
     	label.setLocation( location );
     	if ( snap )
     		snap( label );
@@ -183,24 +183,24 @@ public class Layout extends JDesktopPane
 		new Run( this, palette, model, console );
 	}
 
-	public void setMain( Label main )
+	public void setMain( Representation main )
 	{
 		this.main = main;
 	}
 
-	public Piece.Label getMain()
+	public Piece.Representation getMain()
 	{
 		return main;
 	}
 
-	protected void snap( Piece.Label piece )
+	protected void snap( Piece.Representation piece )
 	{
 		Point snap = null;
 		for ( int i = 0; i < getComponentCount(); i++ )
 		{
 			Component component = getComponent( i );
-			if ( component != piece && component instanceof Piece.Label )
-				snap = Piece.closest( ( (Piece.Label)component ).getPiece().snap( piece.getPiece() ), snap, piece.getLocation() );
+			if ( component != piece && component instanceof Piece.Representation )
+				snap = Piece.closest( ( (Piece.Representation)component ).getPiece().snap( piece.getPiece() ), snap, piece.getLocation() );
 		}
 		if ( snap != null )
 			piece.setLocation( snap );

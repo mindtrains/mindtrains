@@ -3,6 +3,7 @@
  */
 package uk.co.mindtrains;
 
+import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Random;
 
@@ -92,11 +93,11 @@ public class Piece implements Cloneable
 		return null;
 	}
 
-	public class Label extends JLabel
+	public class Representation extends JLabel
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Label()
+		public Representation()
 		{
 			super( icon );
 	    	setSize( icon.getIconWidth(), icon.getIconHeight() );
@@ -119,6 +120,20 @@ public class Piece implements Cloneable
 			super.setLocation( p );
 			Piece.this.setLocation( p );
 		}
+
+		public void paint( Graphics graphics )
+		{
+			super.paint( graphics );
+			paintProperties( graphics );
+		}
+	}
+
+	/**
+	 * Allows more information about the piece's current properties to be displayed.
+	 * Subclasses should override this as necessary.
+	 */
+	public void paintProperties( Graphics graphics )
+	{
 	}
 
 	/**
@@ -128,7 +143,7 @@ public class Piece implements Cloneable
 	public void reset()
 	{
 	}
-	
+
 	public Connector travel( Train train, Connector entry, Console console )
 	{
 		if ( connectors.length == 1 )

@@ -3,6 +3,11 @@
  */
 package uk.co.mindtrains;
 
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+
 import javax.swing.Icon;
 import javax.swing.InputVerifier;
 import javax.swing.JComboBox;
@@ -14,6 +19,8 @@ import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
 
 public class If extends Piece
 {
+	protected final static Font FONT = new Font( "SansSerif", Font.PLAIN, 8 );
+
 	public static class Limit implements Cloneable, CustomEditor
 	{
 		public static class Editor extends ComboBoxPropertyEditor
@@ -128,11 +135,18 @@ public class If extends Piece
 	{
 		super( id, icon, connectors );
 	}
-
-	public void reset()
-	{
-	}
 	
+	public void paintProperties( Graphics graphics )
+	{
+		if ( getId().equals( "if2" ) )
+		{
+			String properties = limit.operand1 + limit.comparison + limit.operand2;
+			graphics.setFont( FONT );
+			Rectangle2D bounds = FONT.getStringBounds( properties, ( (Graphics2D)graphics ).getFontRenderContext() );
+			( (Graphics2D)graphics ).drawString( properties, 10.0f, (float)( bounds.getHeight() - 3 ) );
+		}
+	}
+
 	public Connector travel( Train train, Connector entry, Console console )
 	{
 		if ( entry == connectors[ 0 ] )

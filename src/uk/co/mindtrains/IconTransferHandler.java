@@ -88,8 +88,8 @@ public class IconTransferHandler extends TransferHandler
 
 	protected Transferable createTransferable( JComponent c )
 	{
-		final Piece piece = (Piece)( (Piece.Label)c ).getPiece().clone();
-		layout.setDragging( piece.new Label() );
+		final Piece piece = (Piece)( (Piece.Representation)c ).getPiece().clone();
+		layout.setDragging( piece.new Representation() );
 		return new Transferable()
 		{
 			public DataFlavor[] getTransferDataFlavors()

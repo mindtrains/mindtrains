@@ -26,8 +26,8 @@ public class Run extends Thread
 	public void run()
 	{
 		for ( int i = 0; i < layout.getComponentCount(); i++ )
-			if ( layout.getComponent( i ) instanceof Piece.Label )
-				( (Piece.Label)layout.getComponent( i ) ).getPiece().reset();
+			if ( layout.getComponent( i ) instanceof Piece.Representation )
+				( (Piece.Representation)layout.getComponent( i ) ).getPiece().reset();
 
 		console.clear();
 		console.setVisible( true );
@@ -35,7 +35,7 @@ public class Run extends Thread
 		Train train = new Train();
 		layout.add( train, 0 );
 		
-		Piece.Label now = layout.getMain();
+		Piece.Representation now = layout.getMain();
 		Connector entry = null;
 		do
 		{
@@ -45,9 +45,9 @@ public class Run extends Thread
 			train.setLocation( exit.midlocation() );
 			for ( int i = 0; i < layout.getComponentCount(); i++ )
 			{
-				if ( layout.getComponent( i ) instanceof Piece.Label )
+				if ( layout.getComponent( i ) instanceof Piece.Representation )
 				{
-					Piece.Label piece = (Piece.Label)layout.getComponent( i );
+					Piece.Representation piece = (Piece.Representation)layout.getComponent( i );
 					if ( piece != now  )
 					{
 						entry = piece.getPiece().connected( exit );
