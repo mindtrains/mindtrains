@@ -1,5 +1,15 @@
 <mindtrains>
   <land>
+    <piece ref="straight4" x="210" y="466" />
+    <piece ref="straight3" x="210" y="431" />
+    <piece ref="straight4" x="210" y="346" />
+    <piece ref="curve6" x="108" y="435" />
+    <piece ref="curve7" x="154" y="435" />
+    <piece ref="if3" x="193" y="396">
+      <property name="comparison" value="==" />
+      <property name="operand1" value="A" />
+      <property name="operand2" value="0" />
+    </piece>
     <piece ref="random" x="55" y="66">
       <property name="maximum" value="6" />
     </piece>
@@ -14,68 +24,9 @@
       <property name="operand1" value="A" />
       <property name="operand2" value="B" />
     </piece>
-    <piece ref="if2" x="55" y="346">
-      <property name="comparison" value="&lt;" />
-      <property name="operand1" value="A" />
-      <property name="operand2" value="B" />
-    </piece>
-    <piece ref="if2" x="55" y="621">
-      <property name="comparison" value="!=" />
-      <property name="operand1" value="A" />
-      <property name="operand2" value="B" />
-    </piece>
-    <piece ref="output" x="55" y="656">
-      <property name="message" value="Congratulations!" />
-    </piece>
-    <piece ref="output" x="225" y="241">
-      <property name="message" value="Try again!" />
-    </piece>
-    <piece ref="output" x="160" y="431">
-      <property name="message" value="Too high!" />
-    </piece>
-    <piece ref="output" x="90" y="431">
-      <property name="message" value="Too low!" />
-    </piece>
-    <piece ref="curve8" x="143" y="466" />
-    <piece ref="curve4" x="143" y="385" />
     <piece ref="straight3" x="55" y="311" />
-    <piece ref="diagonal4" x="74" y="316" />
-    <piece ref="diagonal4" x="109" y="351" />
-    <piece ref="diagonal2" x="109" y="506" />
-    <piece ref="diagonal2" x="74" y="541" />
-    <piece ref="straight3" x="225" y="346" />
-    <piece ref="straight4" x="225" y="381" />
-    <piece ref="curve7" x="169" y="660" />
-    <piece ref="curve8" x="208" y="621" />
-    <piece ref="straight3" x="225" y="586" />
-    <piece ref="straight3" x="225" y="551" />
-    <piece ref="straight3" x="225" y="516" />
-    <piece ref="straight4" x="225" y="466" />
-    <piece ref="straight3" x="225" y="431" />
-    <piece ref="straight3" x="225" y="311" />
-    <piece ref="straight3" x="225" y="276" />
-    <piece ref="curve4" x="208" y="195" />
-    <piece ref="curve3" x="169" y="177" />
-    <piece ref="straight2" x="119" y="177" />
     <piece ref="curve2" x="73" y="177" />
-    <piece ref="straight2" x="119" y="677" />
-    <piece ref="curve6" x="73" y="660" />
-    <piece ref="if1" x="55" y="575">
-      <property name="comparison" value="&lt;" />
-      <property name="operand1" value="A" />
-      <property name="operand2" value="0" />
-    </piece>
-    <piece ref="straight3" x="55" y="551" />
-    <piece ref="straight4" x="55" y="466" />
-    <piece ref="if1" x="55" y="505">
-      <property name="comparison" value="&lt;" />
-      <property name="operand1" value="A" />
-      <property name="operand2" value="0" />
-    </piece>
     <piece ref="straight3" x="55" y="431" />
-    <piece ref="curve8" x="73" y="466" />
-    <piece ref="curve4" x="73" y="385" />
-    <piece ref="straight4" x="55" y="381" />
     <piece ref="input" x="55" y="241">
       <property name="message" value="" />
     </piece>
@@ -84,10 +35,45 @@
       <property name="operand1" value="A" />
       <property name="operand2" value="0" />
     </piece>
-    <piece ref="straight3" x="55" y="171" />
     <piece ref="curve1" x="877" y="477" />
     <piece ref="curve8" x="918" y="484" />
     <piece ref="straight3" x="867" y="494" />
     <piece ref="curve8" x="862" y="122" />
+    <piece ref="straight3" x="55" y="171" />
+    <piece ref="curve4" x="73" y="315" />
+    <piece ref="output" x="90" y="361">
+      <property name="message" value="Too high!" />
+    </piece>
+    <piece ref="curve5" x="90" y="396" />
+    <piece ref="straight1" x="119" y="177" />
+    <piece ref="curve3" x="154" y="177" />
+    <piece ref="curve4" x="193" y="195" />
+    <piece ref="output" x="210" y="241">
+      <property name="message" value="Try again!" />
+    </piece>
+    <piece ref="straight3" x="210" y="276" />
+    <piece ref="straight3" x="210" y="311" />
+    <piece ref="straight4" x="55" y="346" />
+    <piece ref="if2" x="55" y="396">
+      <property name="comparison" value="&lt;" />
+      <property name="operand1" value="A" />
+      <property name="operand2" value="B" />
+    </piece>
+    <piece ref="curve4" x="73" y="435" />
+    <piece ref="output" x="90" y="481">
+      <property name="message" value="Too low!" />
+    </piece>
+    <piece ref="curve5" x="90" y="516" />
+    <piece ref="curve6" x="108" y="555" />
+    <piece ref="curve7" x="154" y="555" />
+    <piece ref="curve8" x="193" y="516" />
+    <piece ref="straight3" x="55" y="466" />
+    <piece ref="straight3" x="55" y="501" />
+    <piece ref="straight3" x="55" y="536" />
+    <piece ref="output" x="55" y="571">
+      <property name="message" value="Congratulations!" />
+    </piece>
+    <piece ref="straight3" x="55" y="606" />
+    <piece ref="straight3" x="55" y="641" />
   </land>
 </mindtrains>
