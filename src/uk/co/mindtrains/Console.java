@@ -50,7 +50,7 @@ public class Console extends JInternalFrame
 				synchronized ( enter )
 				{
 					System.err.println( "key: " + (int)event.getKeyChar() );
-					textArea.append( "" + event.getKeyChar() );
+					textArea.append( "" + event.getKeyChar() + "\n" );
 					read.append( event.getKeyChar() );
 					enter.notify();
 				}

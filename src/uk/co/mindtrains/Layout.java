@@ -244,10 +244,8 @@ public class Layout extends JDesktopPane
 		    		properties[ i ] = property;
 		    	}
 		    	
-		    	if ( object instanceof Increment.By )
-		    		registry.registerEditor( properties[ 0 ], Increment.By.Editor.class );
-		    	else if ( object instanceof If.Limit )
-		    		registry.registerEditor( properties[ 0 ], If.Limit.Editor.class );
+		    	if ( object instanceof CustomEditor )
+		    		( (CustomEditor)object ).registerEditors( registry, properties );
 		    	
 				return properties;
 			}

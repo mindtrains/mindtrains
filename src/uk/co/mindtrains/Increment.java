@@ -6,10 +6,12 @@ package uk.co.mindtrains;
 import javax.swing.Icon;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
+import com.l2fprod.common.propertysheet.Property;
+import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
 
 public class Increment extends Piece
 {
-	public static class By implements Cloneable
+	public static class By implements Cloneable, CustomEditor
 	{
 		public static class Editor extends ComboBoxPropertyEditor
 		{
@@ -47,6 +49,11 @@ public class Increment extends Piece
 			{
 				return null;
 			}
+		}
+
+		public void registerEditors( PropertyEditorRegistry registry, Property[] properties )
+		{
+	    	registry.registerEditor( properties[ 0 ], Editor.class );
 		}
 	}
 	

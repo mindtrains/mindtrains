@@ -4,26 +4,46 @@
 package uk.co.mindtrains;
 
 import javax.swing.Icon;
+import javax.swing.InputVerifier;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
+import com.l2fprod.common.propertysheet.Property;
+import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
 
 public class If extends Piece
 {
-	public static class Limit implements Cloneable
+	public static class Limit implements Cloneable, CustomEditor
 	{
 		public static class Editor extends ComboBoxPropertyEditor
 		{
 			public Editor()
 			{
 				super();	    
-			    setAvailableValues( new String[] { ">", "==", "<" } );
+			    setAvailableValues( new String[] { "==", "!=", ">", "<" } );
 			    ( (JComboBox)editor ).setEditable( true );
 			}
 		}
 
-		String comparison = "<";
-		int value;
+		public static class OperandEditor extends ComboBoxPropertyEditor
+		{
+			public OperandEditor()
+			{
+				super();	    
+			    setAvailableValues( new String[] { "A", "B" } );
+			    ( (JComboBox)editor ).setEditable( true );
+			    ( (JComboBox)editor ).setInputVerifier( new InputVerifier() {
+					public boolean verify( JComponent arg0 )
+					{
+						return true;
+					}} );
+			}
+		}
+
+		String comparison = "==";
+		String operand1 = "A";
+		String operand2 = "0";
 
 		public String getComparison()
 		{
@@ -35,24 +55,48 @@ public class If extends Piece
 			this.comparison = test;
 		}
 
-		public int getValue()
+		public String getOperand1()
 		{
-			return value;
+			return operand1;
 		}
 
-		public void setValue( int maximum )
+		public void setOperand1( String operand1 )
 		{
-			this.value = maximum;
+			this.operand1 = operand1;
 		}
 
-		public boolean compare( int v )
+		public String getOperand2()
 		{
+			return operand2;
+		}
+
+		public void setOperand2( String operand2 )
+		{
+			this.operand2 = operand2;
+		}
+
+		public boolean compare( Carriages carriages )
+		{
+			int value1 = value( carriages, operand1 );
+			int value2 = value( carriages, operand2 );
 			if ( comparison.equals( ">" ) )
-				return v > value;
-			else if (comparison.equals( "<" ) )
-				return v < value;
+				return value1 > value2;
+			else if ( comparison.equals( "<" ) )
+				return value1 < value2;
+			else if ( comparison.equals( "!=" ) )
+				return value1 != value2;
 			else
-				return v == value;
+				return value1 == value2;
+		}
+
+		protected int value( Carriages carriages, String operand )
+		{
+			if ( operand.equalsIgnoreCase( "A" ) )
+				return carriages.getCarriageA();
+			else if ( operand.equalsIgnoreCase( "B" ) )
+				return carriages.getCarriageB();
+			else
+				return Integer.parseInt( operand );
 		}
 		
 		public Object clone()
@@ -65,6 +109,13 @@ public class If extends Piece
 			{
 				return null;
 			}
+		}
+
+		public void registerEditors( PropertyEditorRegistry registry, Property[] properties )
+		{
+    		registry.registerEditor( properties[ 0 ], Editor.class );
+    		registry.registerEditor( properties[ 1 ], OperandEditor.class );
+    		registry.registerEditor( properties[ 2 ], OperandEditor.class );
 		}
 	}
 	
@@ -86,7 +137,7 @@ public class If extends Piece
 	{
 		if ( entry == connectors[ 0 ] )
 		{
-			if ( limit.compare( ( (Carriages)train.getLoad() ).getCarriageA() ) )
+			if ( limit.compare( (Carriages)train.getLoad() ) )
 			{
 				return connectors[ 1 ];
 			}
